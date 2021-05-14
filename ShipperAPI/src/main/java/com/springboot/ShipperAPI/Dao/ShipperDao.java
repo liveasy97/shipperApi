@@ -14,9 +14,4 @@ public interface ShipperDao extends JpaRepository<Shipper, String> {
 	@Query("select s from Shipper s where s.approved = :approved")
 	List<Shipper> findByApproved(Boolean approved);
 	
-	@Query("select s from Shipper s where s.id = :id")
-	Optional<Shipper> findById(String id);
-	
-	@Query("select s from Shipper s where s.id = :id")
-	Shipper getById(String id);
 }
