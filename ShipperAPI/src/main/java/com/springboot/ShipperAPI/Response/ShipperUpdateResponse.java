@@ -1,4 +1,4 @@
-package com.springboot.ShipperAPI.Model;
+package com.springboot.ShipperAPI.Response;
 
 import lombok.Data;
 

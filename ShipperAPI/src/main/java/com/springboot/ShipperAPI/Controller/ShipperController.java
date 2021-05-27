@@ -11,10 +11,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.springboot.ShipperAPI.Entity.Shipper;
-import com.springboot.ShipperAPI.Model.ShipperCreateResponse;
-import com.springboot.ShipperAPI.Model.ShipperDeleteResponse;
-import com.springboot.ShipperAPI.Model.ShipperUpdateResponse;
+import com.springboot.ShipperAPI.Model.LoadShipper;
+import com.springboot.ShipperAPI.Response.ShipperCreateResponse;
+import com.springboot.ShipperAPI.Response.ShipperDeleteResponse;
+import com.springboot.ShipperAPI.Response.ShipperUpdateResponse;
 import com.springboot.ShipperAPI.Service.ShipperService;
 
 @RestController
@@ -24,27 +26,25 @@ public class ShipperController {
 	ShipperService service;
 	
 	@PostMapping("/shipper")
-	public ShipperCreateResponse addShipper(@RequestBody Shipper shipper) {
-		return service.addShipper(shipper);
+	public ShipperCreateResponse addShipper(@RequestBody LoadShipper loadShipper) {
+		return service.addShipper(loadShipper);
 	}
 	
 	@GetMapping("/shipper")
-	public List<Shipper> getShippers(@RequestParam(required = false) Boolean approved){
-		
-		return service.getShippers(approved);
+	public List<Shipper> getShippers(@RequestParam(required = false) Boolean approved, @RequestParam(required = false) Integer pageNo){
+		return service.getShippers(approved, pageNo);
 		
 	}
 	
 	@GetMapping("/shipper/{id}")
 	private Shipper getOneShipper(@PathVariable String id) {
-		// TODO Auto-generated method stub
 		return service.getOneShipper(id);
 	}
 	
 	
 	@PutMapping("/shipper/{id}")
-	public ShipperUpdateResponse updateShipper(@PathVariable String id, @RequestBody Shipper shipper){
-		return service.updateShipper(id, shipper);
+	public ShipperUpdateResponse updateShipper(@PathVariable String id, @RequestBody LoadShipper loadShipper){
+		return service.updateShipper(id, loadShipper);
 	}
 	
 	

@@ -7,13 +7,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.springboot.ShipperAPI.Constants.CommonConstants;
 import com.springboot.ShipperAPI.Dao.ShipperDao;
 import com.springboot.ShipperAPI.Entity.Shipper;
-import com.springboot.ShipperAPI.Model.ShipperCreateResponse;
-import com.springboot.ShipperAPI.Model.ShipperDeleteResponse;
-import com.springboot.ShipperAPI.Model.ShipperUpdateResponse;
+import com.springboot.ShipperAPI.Model.LoadShipper;
+import com.springboot.ShipperAPI.Response.ShipperCreateResponse;
+import com.springboot.ShipperAPI.Response.ShipperDeleteResponse;
+import com.springboot.ShipperAPI.Response.ShipperUpdateResponse;
 
 @Service
 public class ShipperServiceImpl implements ShipperService {
@@ -22,16 +25,30 @@ public class ShipperServiceImpl implements ShipperService {
 	ShipperDao shipperdao;
 	
 	@Override
-	public ShipperCreateResponse addShipper(Shipper shipper) {
+	public ShipperCreateResponse addShipper(LoadShipper addShipper) {
 		// TODO Auto-generated method stub
+		Shipper shipper = new Shipper();
 		ShipperCreateResponse createResponse = new ShipperCreateResponse();
-		if (shipper.getName() == null) {
+		
+		if (addShipper.getName() == null) {
 			createResponse.setStatus(CommonConstants.ERROR);
 			createResponse.setMessage(CommonConstants.NAME_ERROR);
 			return createResponse;
 		}
 		
-		if (shipper.getPhoneNo() == 0) {
+		if (addShipper.getName().trim().length()<1) {
+			createResponse.setStatus(CommonConstants.ERROR);
+			createResponse.setMessage(CommonConstants.EMPTY_NAME_ERROR);
+			return createResponse;
+		}
+		
+		if (addShipper.getCompanyName().trim().length()<1) {
+			createResponse.setStatus(CommonConstants.ERROR);
+			createResponse.setMessage(CommonConstants.EMPTY_COMPANY_NAME_ERROR);
+			return createResponse;
+		}
+		
+		if (addShipper.getPhoneNo() == null) {
 			createResponse.setStatus(CommonConstants.ERROR);
 			createResponse.setMessage(CommonConstants.PHONE_NUMBER_ERROR);
 			return createResponse;
@@ -39,7 +56,7 @@ public class ShipperServiceImpl implements ShipperService {
 		
 		String validate = "[0-9]{10}$";
 		Pattern pattern = Pattern.compile(validate);
-		Matcher m = pattern.matcher(Long.toString(shipper.getPhoneNo()));
+		Matcher m = pattern.matcher(Long.toString(addShipper.getPhoneNo()));
 		if(!m.matches()) {
 			createResponse.setStatus(CommonConstants.ERROR);
 			createResponse.setMessage(CommonConstants.INCORRECT_PHONE_NUMBER);
@@ -47,7 +64,7 @@ public class ShipperServiceImpl implements ShipperService {
 		}
 		
 		String a = null;
-		a = shipperdao.findByPhoneNo(shipper.getPhoneNo());
+		a = shipperdao.findByPhoneNo(addShipper.getPhoneNo());
 		if (a != null) {
 			createResponse.setStatus(CommonConstants.ERROR);
 			createResponse.setMessage(CommonConstants.ACCOUNT_EXIST);
@@ -55,6 +72,11 @@ public class ShipperServiceImpl implements ShipperService {
 		}
 		
 		shipper.setId("shipper:"+UUID.randomUUID());
+		shipper.setApproved(addShipper.isApproved());
+		shipper.setCompanyName(addShipper.getCompanyName().trim());
+		shipper.setKyc(addShipper.getKyc());
+		shipper.setName(addShipper.getName().trim());
+		shipper.setPhoneNo(addShipper.getPhoneNo());
 		shipperdao.save(shipper);
 		createResponse.setStatus(CommonConstants.PENDING);
 		createResponse.setMessage(CommonConstants.APPROVE_REQUEST);
@@ -63,11 +85,17 @@ public class ShipperServiceImpl implements ShipperService {
 	}
 
 	@Override
-	public List<Shipper> getShippers(Boolean approved) {
-		if(approved==null) {
-			return shipperdao.findAll();
+	public List<Shipper> getShippers(Boolean approved, Integer pageNo) {
+		if(pageNo == null) {
+			pageNo = 0;
 		}
-		return shipperdao.findByApproved(approved);
+		
+		Pageable page = PageRequest.of(pageNo, 2);
+		
+		if(approved==null) {
+			return shipperdao.findAll(page).getContent();
+		}
+		return shipperdao.findByApproved(approved, page);
 	}
 
 	@Override
@@ -80,21 +108,33 @@ public class ShipperServiceImpl implements ShipperService {
 	}
 
 	@Override
-	public ShipperUpdateResponse updateShipper(String id, Shipper updateShipper) {
+	public ShipperUpdateResponse updateShipper(String id, LoadShipper updateShipper) {
 		// TODO Auto-generated method stub
 		ShipperUpdateResponse updateResponse = new ShipperUpdateResponse();
 		Shipper shipper = new Shipper();
 		Optional<Shipper> S = shipperdao.findById(id);
 		if(S.isPresent()) {
 			shipper = S.get();
-			if (updateShipper.getPhoneNo() != 0) {			
+			if (updateShipper.getPhoneNo() != null) {			
 				updateResponse.setStatus(CommonConstants.ERROR);
 				updateResponse.setMessage(CommonConstants.PHONE_NUMBER_UPDATE_ERROR);
 				return updateResponse;
 			}
+			
+			if (updateShipper.getName().trim().length()<1) {
+				updateResponse.setStatus(CommonConstants.ERROR);
+				updateResponse.setMessage(CommonConstants.EMPTY_NAME_ERROR);
+				return updateResponse;
+			}
+			
+			if (updateShipper.getCompanyName().trim().length()<1) {
+				updateResponse.setStatus(CommonConstants.ERROR);
+				updateResponse.setMessage(CommonConstants.EMPTY_COMPANY_NAME_ERROR);
+				return updateResponse;
+			}
 
 			if (updateShipper.getName() != null) {
-				shipper.setName(updateShipper.getName());
+				shipper.setName(updateShipper.getName().trim());
 			}
 
 			if (updateShipper.getKyc() != null) {
@@ -102,7 +142,7 @@ public class ShipperServiceImpl implements ShipperService {
 			}
 			
 			if (updateShipper.getCompanyName()!= null) {
-				shipper.setCompanyName(updateShipper.getCompanyName());
+				shipper.setCompanyName(updateShipper.getCompanyName().trim());
 			}
 
 			shipper.setApproved(updateShipper.isApproved());

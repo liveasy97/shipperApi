@@ -15,7 +15,7 @@ public class Shipper {
 	
 	private String name;
 	private String companyName;
-	private long phoneNo;
+	private Long phoneNo;
 	private String kyc;
 	private boolean approved;
 }
