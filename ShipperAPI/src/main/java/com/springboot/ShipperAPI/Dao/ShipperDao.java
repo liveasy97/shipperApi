@@ -7,9 +7,11 @@ import org.springframework.data.jpa.repository.Query;
 import com.springboot.ShipperAPI.Entity.Shipper;
 
 public interface ShipperDao extends JpaRepository<Shipper, String> {
-	@Query("select name from Shipper s where s.phoneNo = :phoneNo")
-	String findByPhoneNo(Long phoneNo);	
+	@Query("select phoneNo from Shipper s where s.phoneNo = :phoneNo")
+	Long findByPhoneNo(Long phoneNo);	
 	
-	List<Shipper> findByApproved(Boolean approved, Pageable pageable);
+	@Query("select s from Shipper s where s.phoneNo = :phoneNo")
+	Shipper findShipperByPhoneNo(Long phoneNo);	
 
+	List<Shipper> findByCompanyApproved(Boolean companyApproved, Pageable pageable);
 }

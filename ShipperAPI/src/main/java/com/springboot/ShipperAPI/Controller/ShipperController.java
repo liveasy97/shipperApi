@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.springboot.ShipperAPI.Entity.Shipper;
-import com.springboot.ShipperAPI.Model.LoadShipper;
+import com.springboot.ShipperAPI.Model.PostShipper;
+import com.springboot.ShipperAPI.Model.UpdateShipper;
 import com.springboot.ShipperAPI.Response.ShipperCreateResponse;
 import com.springboot.ShipperAPI.Response.ShipperDeleteResponse;
 import com.springboot.ShipperAPI.Response.ShipperUpdateResponse;
@@ -25,14 +26,20 @@ public class ShipperController {
 	@Autowired
 	ShipperService service;
 	
+	@GetMapping("/home")
+	public String home() {
+		return "Welcome to shipperApi...!!!";
+	}
+	
+	
 	@PostMapping("/shipper")
-	public ShipperCreateResponse addShipper(@RequestBody LoadShipper loadShipper) {
-		return service.addShipper(loadShipper);
+	public ShipperCreateResponse addShipper(@RequestBody PostShipper postShipper) {
+		return service.addShipper(postShipper);
 	}
 	
 	@GetMapping("/shipper")
-	public List<Shipper> getShippers(@RequestParam(required = false) Boolean approved, @RequestParam(required = false) Integer pageNo){
-		return service.getShippers(approved, pageNo);
+	public List<Shipper> getShippers(@RequestParam(required = false) Boolean companyApproved, @RequestParam(required = false) Integer pageNo) {
+		return service.getShippers(companyApproved, pageNo);
 		
 	}
 	
@@ -43,8 +50,8 @@ public class ShipperController {
 	
 	
 	@PutMapping("/shipper/{id}")
-	public ShipperUpdateResponse updateShipper(@PathVariable String id, @RequestBody LoadShipper loadShipper){
-		return service.updateShipper(id, loadShipper);
+	public ShipperUpdateResponse updateShipper(@PathVariable String id, @RequestBody UpdateShipper updateShipper){
+		return service.updateShipper(id, updateShipper);
 	}
 	
 	
