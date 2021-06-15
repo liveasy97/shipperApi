@@ -13,7 +13,6 @@ import lombok.Data;
 public class Shipper {
 	@Id
 	private String id;
-	
 	private String name;
 	private String companyName;
 	private Long phoneNo;

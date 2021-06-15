@@ -48,11 +48,21 @@ public class ShipperServiceImpl implements ShipperService {
 			return createResponse;
 		}
 		
-		String a = null;
+		Long a = null;
 		a = shipperdao.findByPhoneNo(addShipper.getPhoneNo());
+		
 		if (a != null) {
+			shipper = shipperdao.findShipperByPhoneNo(addShipper.getPhoneNo());
 			createResponse.setStatus(CommonConstants.ERROR);
 			createResponse.setMessage(CommonConstants.ACCOUNT_EXIST);
+			createResponse.setId(shipper.getId());
+			createResponse.setPhoneNo(shipper.getPhoneNo());
+			createResponse.setName(shipper.getName());
+			createResponse.setCompanyName(shipper.getCompanyName());
+			createResponse.setShipperLocation(shipper.getShipperLocation());
+			createResponse.setKyc(shipper.getKyc());
+			createResponse.setCompanyApproved(shipper.isCompanyApproved());
+			createResponse.setAccountVerificationInProgress(shipper.isAccountVerificationInProgress());
 			return createResponse;
 		}
 		
