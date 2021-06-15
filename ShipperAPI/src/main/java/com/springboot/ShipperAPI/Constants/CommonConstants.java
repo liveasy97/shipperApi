@@ -16,4 +16,5 @@ public class CommonConstants {
 	public static String INCORRECT_PHONE_NUMBER = "Enter 10 digits phone number";
 	public static String EMPTY_COMPANY_NAME_ERROR = "Company name cannot be empty or cannot contain only whitespaces";
 	public static String EMPTY_NAME_ERROR = "Name cannot be empty or cannot contain only whitespaces";
+	public static String EMPTY_SHIPPER_LOCATION_ERROR = "Shipper location cannot be empty or cannot contain only whitespaces";
 }

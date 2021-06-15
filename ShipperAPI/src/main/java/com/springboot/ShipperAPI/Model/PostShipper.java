@@ -3,10 +3,10 @@ package com.springboot.ShipperAPI.Model;
 import lombok.Data;
 
 @Data
-public class LoadShipper {
+public class PostShipper {
 	private String name;
 	private String companyName;
+	private String shipperLocation;
 	private Long phoneNo;
 	private String kyc;
-	private boolean approved;
 }
