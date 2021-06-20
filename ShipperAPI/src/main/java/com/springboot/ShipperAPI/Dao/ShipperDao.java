@@ -13,5 +13,8 @@ public interface ShipperDao extends JpaRepository<Shipper, String> {
 	@Query("select s from Shipper s where s.phoneNo = :phoneNo")
 	Shipper findShipperByPhoneNo(Long phoneNo);	
 
+	@Query("select s from Shipper s")
+	List<Shipper> getAll(Pageable pageable);
+	
 	List<Shipper> findByCompanyApproved(Boolean companyApproved, Pageable pageable);
 }

@@ -7,8 +7,8 @@ public class ShipperCreateResponse {
 	private String status;
 	private String message;
 	
-	private String id;
-	private String name;
+	private String shipperId;
+	private String shipperName;
 	private String companyName;
 	private Long phoneNo;
 	private String kyc;

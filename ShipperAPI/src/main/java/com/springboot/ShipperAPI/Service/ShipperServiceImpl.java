@@ -1,5 +1,6 @@
 package com.springboot.ShipperAPI.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -55,9 +56,9 @@ public class ShipperServiceImpl implements ShipperService {
 			shipper = shipperdao.findShipperByPhoneNo(addShipper.getPhoneNo());
 			createResponse.setStatus(CommonConstants.ERROR);
 			createResponse.setMessage(CommonConstants.ACCOUNT_EXIST);
-			createResponse.setId(shipper.getId());
+			createResponse.setShipperId(shipper.getShipperId());
 			createResponse.setPhoneNo(shipper.getPhoneNo());
-			createResponse.setName(shipper.getName());
+			createResponse.setShipperName(shipper.getShipperName());
 			createResponse.setCompanyName(shipper.getCompanyName());
 			createResponse.setShipperLocation(shipper.getShipperLocation());
 			createResponse.setKyc(shipper.getKyc());
@@ -66,13 +67,13 @@ public class ShipperServiceImpl implements ShipperService {
 			return createResponse;
 		}
 		
-		if (addShipper.getName() != null) {
-			if (addShipper.getName().trim().length()<1) {
+		if (addShipper.getShipperName() != null) {
+			if (addShipper.getShipperName().trim().length()<1) {
 				createResponse.setStatus(CommonConstants.ERROR);
 				createResponse.setMessage(CommonConstants.EMPTY_NAME_ERROR);
 				return createResponse;
 			}
-			name = addShipper.getName().trim();
+			name = addShipper.getShipperName().trim();
 		}
 		
 		if(addShipper.getCompanyName() != null) {
@@ -93,9 +94,9 @@ public class ShipperServiceImpl implements ShipperService {
 			shipperLocation = addShipper.getShipperLocation().trim();
 		}
 		
-		shipper.setId("shipper:"+UUID.randomUUID());
+		shipper.setShipperId("shipper:"+UUID.randomUUID());
 		shipper.setPhoneNo(addShipper.getPhoneNo());
-		shipper.setName(name);
+		shipper.setShipperName(name);
 		shipper.setCompanyName(companyName);
 		shipper.setShipperLocation(shipperLocation);
 		shipper.setKyc(addShipper.getKyc());
@@ -105,9 +106,9 @@ public class ShipperServiceImpl implements ShipperService {
 		
 		createResponse.setStatus(CommonConstants.PENDING);
 		createResponse.setMessage(CommonConstants.APPROVE_REQUEST);
-		createResponse.setId(shipper.getId());
+		createResponse.setShipperId(shipper.getShipperId());
 		createResponse.setPhoneNo(shipper.getPhoneNo());
-		createResponse.setName(shipper.getName());
+		createResponse.setShipperName(shipper.getShipperName());
 		createResponse.setCompanyName(shipper.getCompanyName());
 		createResponse.setShipperLocation(shipper.getShipperLocation());
 		createResponse.setKyc(shipper.getKyc());
@@ -118,33 +119,37 @@ public class ShipperServiceImpl implements ShipperService {
 	}
 
 	@Override
-	public List<Shipper> getShippers(Boolean companyApproved, Integer pageNo) {
+	public List<Shipper> getShippers(Boolean companyApproved, Integer pageNo) { 
 		if(pageNo == null) {
 			pageNo = 0;
 		}
-		Pageable page = PageRequest.of(pageNo, 2);
+		Pageable page = PageRequest.of(pageNo, 15);
 		
 		if(companyApproved == null) {
-			return shipperdao.findAll(page).getContent();
-		}
-		return shipperdao.findByCompanyApproved(companyApproved, page);
+			List<Shipper> shipperList = shipperdao.getAll(page);
+			Collections.reverse(shipperList);
+			return shipperList;
+		} 
+		List<Shipper> shipperList = shipperdao.findByCompanyApproved(companyApproved, page);
+		Collections.reverse(shipperList);
+		return shipperList;
 	}
 
 	@Override
-	public Shipper getOneShipper(String id) {
-		Optional<Shipper> S = shipperdao.findById(id);
+	public Shipper getOneShipper(String shipperId) {
+		Optional<Shipper> S = shipperdao.findById(shipperId);
 		if(S.isPresent()) {
-			return shipperdao.findById(id).get();
+			return shipperdao.findById(shipperId).get();
 		}
 		return null;
 	}
 
 	@Override
-	public ShipperUpdateResponse updateShipper(String id, UpdateShipper updateShipper) {
+	public ShipperUpdateResponse updateShipper(String shipperId, UpdateShipper updateShipper) {
 		// TODO Auto-generated method stub
 		ShipperUpdateResponse updateResponse = new ShipperUpdateResponse();
 		Shipper shipper = new Shipper();
-		Optional<Shipper> S = shipperdao.findById(id);
+		Optional<Shipper> S = shipperdao.findById(shipperId);
 		if(S.isPresent()) {
 			shipper = S.get();
 			if (updateShipper.getPhoneNo() != null) {			
@@ -153,13 +158,13 @@ public class ShipperServiceImpl implements ShipperService {
 				return updateResponse;
 			}
 			
-			if (updateShipper.getName() != null) {
-				if (updateShipper.getName().trim().length()<1) {
+			if (updateShipper.getShipperName() != null) {
+				if (updateShipper.getShipperName().trim().length()<1) {
 					updateResponse.setStatus(CommonConstants.ERROR);
 					updateResponse.setMessage(CommonConstants.EMPTY_NAME_ERROR);
 					return updateResponse;
 				}
-				shipper.setName(updateShipper.getName().trim());
+				shipper.setShipperName(updateShipper.getShipperName().trim());
 			}
 			
 			if(updateShipper.getCompanyName() != null) {
@@ -188,15 +193,15 @@ public class ShipperServiceImpl implements ShipperService {
 				shipper.setCompanyApproved(updateShipper.getCompanyApproved());
 			}
 			
-			if(updateShipper.getAccountVerificationInProgress()) {
+			if(updateShipper.getAccountVerificationInProgress() != null) {
 				shipper.setAccountVerificationInProgress(updateShipper.getAccountVerificationInProgress());
 			}
 			
 			shipperdao.save(shipper);
 			
-			updateResponse.setId(shipper.getId());
+			updateResponse.setShipperId(shipper.getShipperId());
 			updateResponse.setPhoneNo(shipper.getPhoneNo());
-			updateResponse.setName(shipper.getName());
+			updateResponse.setShipperName(shipper.getShipperName());
 			updateResponse.setCompanyName(shipper.getCompanyName());
 			updateResponse.setShipperLocation(shipper.getShipperLocation());
 			updateResponse.setKyc(shipper.getKyc());
@@ -215,9 +220,9 @@ public class ShipperServiceImpl implements ShipperService {
 	}
 
 	@Override
-	public ShipperDeleteResponse deleteShipper(String id) {
+	public ShipperDeleteResponse deleteShipper(String shipperId) {
 		ShipperDeleteResponse deleteResponse = new ShipperDeleteResponse();
-		Optional<Shipper> S = shipperdao.findById(id);
+		Optional<Shipper> S = shipperdao.findById(shipperId);
 		 
 		if( S.isPresent()) {
 			shipperdao.delete(S.get());

@@ -43,21 +43,21 @@ public class ShipperController {
 		
 	}
 	
-	@GetMapping("/shipper/{id}")
-	private Shipper getOneShipper(@PathVariable String id) {
-		return service.getOneShipper(id);
+	@GetMapping("/shipper/{shipperId}")
+	private Shipper getOneShipper(@PathVariable String shipperId) {
+		return service.getOneShipper(shipperId);
 	}
 	
 	
-	@PutMapping("/shipper/{id}")
-	public ShipperUpdateResponse updateShipper(@PathVariable String id, @RequestBody UpdateShipper updateShipper){
-		return service.updateShipper(id, updateShipper);
+	@PutMapping("/shipper/{shipperId}")
+	public ShipperUpdateResponse updateShipper(@PathVariable String shipperId, @RequestBody UpdateShipper updateShipper){
+		return service.updateShipper(shipperId, updateShipper);
 	}
 	
 	
-	@DeleteMapping("/shipper/{id}")
-	public ShipperDeleteResponse deleteShipper(@PathVariable String id){
-		return service.deleteShipper(id);
+	@DeleteMapping("/shipper/{shipperId}")
+	public ShipperDeleteResponse deleteShipper(@PathVariable String shipperId){
+		return service.deleteShipper(shipperId);
 	}
 
 }

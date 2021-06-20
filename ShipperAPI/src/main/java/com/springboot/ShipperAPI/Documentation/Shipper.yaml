@@ -98,7 +98,7 @@ paths:
         '404':
           description: Not Found
       deprecated: false
-  '/shipper/{id}':
+  '/shipper/{shipperId}':
     get:
       tags:
         - shipper-controller
@@ -107,9 +107,9 @@ paths:
       produces:
         - '*/*'
       parameters:
-        - name: id
+        - name: shipperId
           in: path
-          description: id
+          description: shipperId
           required: true
           type: string
       responses:
@@ -134,9 +134,9 @@ paths:
       produces:
         - '*/*'
       parameters:
-        - name: id
+        - name: shipperId
           in: path
-          description: id
+          description: shipperId
           required: true
           type: string
         - in: body
@@ -167,9 +167,9 @@ paths:
       produces:
         - '*/*'
       parameters:
-        - name: id
+        - name: shipperId
           in: path
-          description: id
+          description: shipperId
           required: true
           type: string
       responses:
@@ -192,12 +192,12 @@ definitions:
         type: string
       kyc:
         type: string
-      name:
-        type: string
       phoneNo:
         type: integer
         format: int64
       shipperLocation:
+        type: string
+      shipperName:
         type: string
     title: PostShipper
   Shipper:
@@ -209,16 +209,16 @@ definitions:
         type: boolean
       companyName:
         type: string
-      id:
-        type: string
       kyc:
-        type: string
-      name:
         type: string
       phoneNo:
         type: integer
         format: int64
+      shipperId:
+        type: string
       shipperLocation:
+        type: string
+      shipperName:
         type: string
     title: Shipper
   ShipperCreateResponse:
@@ -230,18 +230,18 @@ definitions:
         type: boolean
       companyName:
         type: string
-      id:
-        type: string
       kyc:
         type: string
       message:
         type: string
-      name:
-        type: string
       phoneNo:
         type: integer
         format: int64
+      shipperId:
+        type: string
       shipperLocation:
+        type: string
+      shipperName:
         type: string
       status:
         type: string
@@ -263,18 +263,18 @@ definitions:
         type: boolean
       companyName:
         type: string
-      id:
-        type: string
       kyc:
         type: string
       message:
         type: string
-      name:
-        type: string
       phoneNo:
         type: integer
         format: int64
+      shipperId:
+        type: string
       shipperLocation:
+        type: string
+      shipperName:
         type: string
       status:
         type: string
@@ -290,11 +290,11 @@ definitions:
         type: string
       kyc:
         type: string
-      name:
-        type: string
       phoneNo:
         type: integer
         format: int64
       shipperLocation:
+        type: string
+      shipperName:
         type: string
     title: UpdateShipper
