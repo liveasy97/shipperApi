@@ -17,11 +17,11 @@ public interface ShipperService {
 
 	List<Shipper> getShippers(Boolean companyApproved, Integer pageNo);
 
-	Shipper getOneShipper(String id);
+	Shipper getOneShipper(String shipperId);
 
-	ShipperUpdateResponse updateShipper(String id, UpdateShipper shipper);
+	ShipperUpdateResponse updateShipper(String shipperId, UpdateShipper shipper);
 
-	ShipperDeleteResponse deleteShipper(String id);
+	ShipperDeleteResponse deleteShipper(String shipperId);
 
 
 }

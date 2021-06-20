@@ -12,8 +12,8 @@ import lombok.Data;
 @Entity
 public class Shipper {
 	@Id
-	private String id;
-	private String name;
+	private String shipperId;
+	private String shipperName;
 	private String companyName;
 	private Long phoneNo;
 	private String kyc;

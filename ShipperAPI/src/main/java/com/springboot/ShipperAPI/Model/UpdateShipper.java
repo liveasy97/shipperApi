@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class UpdateShipper {
 	private Long phoneNo;
-	private String name;
+	private String shipperName;
 	private String companyName;
 	private String kyc;
 	private String shipperLocation;
