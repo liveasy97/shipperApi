@@ -5,11 +5,15 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-@Table(name = "Shipper")
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name = "Shipper")
 public class Shipper {
 	@Id
 	private String shipperId;

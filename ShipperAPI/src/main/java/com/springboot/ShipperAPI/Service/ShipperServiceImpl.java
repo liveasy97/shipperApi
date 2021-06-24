@@ -123,7 +123,7 @@ public class ShipperServiceImpl implements ShipperService {
 		if(pageNo == null) {
 			pageNo = 0;
 		}
-		Pageable page = PageRequest.of(pageNo, 15);
+		Pageable page = PageRequest.of(pageNo, (int) CommonConstants.pagesize);
 		
 		if(companyApproved == null) {
 			List<Shipper> shipperList = shipperdao.getAll(page);
@@ -236,5 +236,4 @@ public class ShipperServiceImpl implements ShipperService {
 			return deleteResponse;
 		}
 	}
-
 }

@@ -17,4 +17,8 @@ public class CommonConstants {
 	public static String EMPTY_COMPANY_NAME_ERROR = "Company name cannot be empty or cannot contain only whitespaces";
 	public static String EMPTY_NAME_ERROR = "Name cannot be empty or cannot contain only whitespaces";
 	public static String EMPTY_SHIPPER_LOCATION_ERROR = "Shipper location cannot be empty or cannot contain only whitespaces";
+	public static long pagesize = 15;
+	public static String URI = "/shipper";
+	
+	public static String BASEURI = "http://localhost:8080/shipper";
 }
