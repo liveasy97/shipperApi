@@ -23,13 +23,16 @@ import com.springboot.ShipperAPI.Response.ShipperUpdateResponse;
 @Service
 public class ShipperServiceImpl implements ShipperService {
 
-	String companyName = null, name = null, shipperLocation = null;
+	//String companyName = null, name = null, shipperLocation = null;
 	
 	@Autowired
 	ShipperDao shipperdao;
 	
 	@Override
 	public ShipperCreateResponse addShipper(PostShipper addShipper) {
+		
+		String companyName = null, name = null, shipperLocation = null;
+		
 		// TODO Auto-generated method stub
 		Shipper shipper = new Shipper();
 		ShipperCreateResponse createResponse = new ShipperCreateResponse();
@@ -62,8 +65,8 @@ public class ShipperServiceImpl implements ShipperService {
 			createResponse.setCompanyName(shipper.getCompanyName());
 			createResponse.setShipperLocation(shipper.getShipperLocation());
 			createResponse.setKyc(shipper.getKyc());
-			createResponse.setCompanyApproved(shipper.isCompanyApproved());
-			createResponse.setAccountVerificationInProgress(shipper.isAccountVerificationInProgress());
+			createResponse.setCompanyApproved(shipper.getCompanyApproved());
+			createResponse.setAccountVerificationInProgress(shipper.getAccountVerificationInProgress());
 			return createResponse;
 		}
 		
@@ -112,8 +115,8 @@ public class ShipperServiceImpl implements ShipperService {
 		createResponse.setCompanyName(shipper.getCompanyName());
 		createResponse.setShipperLocation(shipper.getShipperLocation());
 		createResponse.setKyc(shipper.getKyc());
-		createResponse.setCompanyApproved(shipper.isCompanyApproved());
-		createResponse.setAccountVerificationInProgress(shipper.isAccountVerificationInProgress());
+		createResponse.setCompanyApproved(shipper.getCompanyApproved());
+		createResponse.setAccountVerificationInProgress(shipper.getAccountVerificationInProgress());
 		return createResponse;
 
 	}
@@ -205,8 +208,8 @@ public class ShipperServiceImpl implements ShipperService {
 			updateResponse.setCompanyName(shipper.getCompanyName());
 			updateResponse.setShipperLocation(shipper.getShipperLocation());
 			updateResponse.setKyc(shipper.getKyc());
-			updateResponse.setCompanyApproved(shipper.isCompanyApproved());
-			updateResponse.setAccountVerificationInProgress(shipper.isAccountVerificationInProgress());
+			updateResponse.setCompanyApproved(shipper.getCompanyApproved());
+			updateResponse.setAccountVerificationInProgress(shipper.getAccountVerificationInProgress());
 			updateResponse.setStatus(CommonConstants.SUCCESS);
 			updateResponse.setMessage(CommonConstants.UPDATE_SUCCESS);
 			return updateResponse;

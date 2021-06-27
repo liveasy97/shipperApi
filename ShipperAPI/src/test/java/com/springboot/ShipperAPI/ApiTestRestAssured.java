@@ -150,16 +150,13 @@ public class ApiTestRestAssured{
 	//add shipper success
 	@Test
 	@Order(1)
-	public void addshippersuccess() throws Exception
+	public void addshippersuccess1() throws Exception
 	{
 		PostShipper postshipper = new PostShipper("person4","company4", (Long) 9999999994L,"link4", "Surat");
         String inputJson = mapToJson(postshipper);
         Response response = (Response) RestAssured.given().header("", "").body(inputJson).header("accept", "application/json")
 				.header("Content-Type", "application/json").post().then().extract().response();
-        
-        System.err.println("**********************");
-        System.err.println("a: " + response.jsonPath().getString("status"));
-        System.err.println("**********************");
+
         String shipperid = response.jsonPath().getString("shipperId");
         assertEquals(200, response.statusCode());
         assertEquals(CommonConstants.PENDING, response.jsonPath().getString("status"));
@@ -178,6 +175,33 @@ public class ApiTestRestAssured{
 		assertEquals(CommonConstants.DELETE_SUCCESS, response2.jsonPath().getString("message"));
 	}
 	
+	@Test
+	@Order(1)
+	public void addshippersuccess2() throws Exception
+	{
+		PostShipper postshipper = new PostShipper(null,null, (Long) 9999999994L,null, null);
+        String inputJson = mapToJson(postshipper);
+        Response response = (Response) RestAssured.given().header("", "").body(inputJson).header("accept", "application/json")
+				.header("Content-Type", "application/json").post().then().extract().response();
+
+        String shipperid = response.jsonPath().getString("shipperId");
+        assertEquals(200, response.statusCode());
+        assertEquals(CommonConstants.PENDING, response.jsonPath().getString("status"));
+        assertEquals(CommonConstants.APPROVE_REQUEST, response.jsonPath().getString("message"));
+		assertEquals(null, response.jsonPath().getString("shipperName"));
+		assertEquals(null, response.jsonPath().getString("companyName"));
+		assertEquals(postshipper.getPhoneNo(), response.jsonPath().getLong("phoneNo"));
+		assertEquals(null, response.jsonPath().getString("kyc"));
+		assertEquals(null, response.jsonPath().getString("shipperLocation"));
+		assertEquals(false, response.jsonPath().getBoolean("companyApproved"));
+		assertEquals(false, response.jsonPath().getBoolean("accountVerificationInProgress"));
+		
+		Response response2 = RestAssured.given().header("", "").delete("/" + shipperid).then().extract().response();
+		assertEquals(200, response2.statusCode());
+		assertEquals(CommonConstants.SUCCESS, response2.jsonPath().getString("status"));
+		assertEquals(CommonConstants.DELETE_SUCCESS, response2.jsonPath().getString("message"));
+	}
+	
 	//add shipper fail, phone number null
 	@Test
 	@Order(2)
@@ -187,10 +211,7 @@ public class ApiTestRestAssured{
         String inputJson = mapToJson(postshipper);
         Response response = (Response) RestAssured.given().header("", "").body(inputJson).header("accept", "application/json")
 				.header("Content-Type", "application/json").post().then().extract().response();
-        
-        System.err.println("**********************");
-        System.err.println("a: " + response.jsonPath().getString("phoneNo"));
-        System.err.println("**********************");
+
         assertEquals(200, response.statusCode());
         assertEquals(CommonConstants.ERROR, response.jsonPath().getString("status"));
         assertEquals(CommonConstants.PHONE_NUMBER_ERROR, response.jsonPath().getString("message"));
@@ -199,8 +220,8 @@ public class ApiTestRestAssured{
 		assertEquals(null, response.jsonPath().getString("phoneNo"));
 		assertEquals(null, response.jsonPath().getString("kyc"));
 		assertEquals(null, response.jsonPath().getString("shipperLocation"));
-		assertEquals(false, response.jsonPath().getBoolean("companyApproved"));
-		assertEquals(false, response.jsonPath().getBoolean("accountVerificationInProgress"));
+		assertEquals(null, response.jsonPath().getString("companyApproved"));
+		assertEquals(null, response.jsonPath().getString("accountVerificationInProgress"));
 	}
 	
 	//add shipper fail phone number invalid (9 digit)
@@ -212,10 +233,7 @@ public class ApiTestRestAssured{
         String inputJson = mapToJson(postshipper);
         Response response = (Response) RestAssured.given().header("", "").body(inputJson).header("accept", "application/json")
 				.header("Content-Type", "application/json").post().then().extract().response();
-        
-        System.err.println("**********************");
-        System.err.println("a: " + response.jsonPath().getString("phoneNo"));
-        System.err.println("**********************");
+
         assertEquals(200, response.statusCode());
         assertEquals(CommonConstants.ERROR, response.jsonPath().getString("status"));
         assertEquals(CommonConstants.INCORRECT_PHONE_NUMBER, response.jsonPath().getString("message"));
@@ -224,8 +242,8 @@ public class ApiTestRestAssured{
 		assertEquals(null, response.jsonPath().getString("phoneNo"));
 		assertEquals(null, response.jsonPath().getString("kyc"));
 		assertEquals(null, response.jsonPath().getString("shipperLocation"));
-		assertEquals(false, response.jsonPath().getBoolean("companyApproved"));
-		assertEquals(false, response.jsonPath().getBoolean("accountVerificationInProgress"));
+		assertEquals(null, response.jsonPath().getString("companyApproved"));
+		assertEquals(null, response.jsonPath().getString("accountVerificationInProgress"));
 	}
 	
 	//add shipper fail account already exist
@@ -237,10 +255,7 @@ public class ApiTestRestAssured{
         String inputJson = mapToJson(postshipper);
         Response response = (Response) RestAssured.given().header("", "").body(inputJson).header("accept", "application/json")
 				.header("Content-Type", "application/json").post().then().extract().response();
-        
-        System.err.println("**********************");
-        System.err.println("a: " + response.jsonPath().getString("phoneNo"));
-        System.err.println("**********************");
+
         assertEquals(200, response.statusCode());
         assertEquals(shipperid1, response.jsonPath().getString("shipperId"));
         assertEquals(CommonConstants.ERROR, response.jsonPath().getString("status"));
@@ -263,10 +278,7 @@ public class ApiTestRestAssured{
         String inputJson = mapToJson(postshipper);
         Response response = (Response) RestAssured.given().header("", "").body(inputJson).header("accept", "application/json")
 				.header("Content-Type", "application/json").post().then().extract().response();
-        
-        System.err.println("**********************");
-        System.err.println("a: " + response.jsonPath().getString("phoneNo"));
-        System.err.println("**********************");
+
         assertEquals(200, response.statusCode());
         assertEquals(CommonConstants.ERROR, response.jsonPath().getString("status"));
         assertEquals(CommonConstants.EMPTY_NAME_ERROR, response.jsonPath().getString("message"));
@@ -275,8 +287,8 @@ public class ApiTestRestAssured{
 		assertEquals(null, response.jsonPath().getString("phoneNo"));
 		assertEquals(null, response.jsonPath().getString("kyc"));
 		assertEquals(null, response.jsonPath().getString("shipperLocation"));
-		assertEquals(false, response.jsonPath().getBoolean("companyApproved"));
-		assertEquals(false, response.jsonPath().getBoolean("accountVerificationInProgress"));
+		assertEquals(null, response.jsonPath().getString("companyApproved"));
+		assertEquals(null, response.jsonPath().getString("accountVerificationInProgress"));
 	}
 	
 	//empty company name 
@@ -288,10 +300,7 @@ public class ApiTestRestAssured{
         String inputJson = mapToJson(postshipper);
         Response response = (Response) RestAssured.given().header("", "").body(inputJson).header("accept", "application/json")
 				.header("Content-Type", "application/json").post().then().extract().response();
-        
-        System.err.println("**********************");
-        System.err.println("a: " + response.jsonPath().getString("phoneNo"));
-        System.err.println("**********************");
+  
         assertEquals(200, response.statusCode());
         assertEquals(CommonConstants.ERROR, response.jsonPath().getString("status"));
         assertEquals(CommonConstants.EMPTY_COMPANY_NAME_ERROR, response.jsonPath().getString("message"));
@@ -300,8 +309,8 @@ public class ApiTestRestAssured{
 		assertEquals(null, response.jsonPath().getString("phoneNo"));
 		assertEquals(null, response.jsonPath().getString("kyc"));
 		assertEquals(null, response.jsonPath().getString("shipperLocation"));
-		assertEquals(false, response.jsonPath().getBoolean("companyApproved"));
-		assertEquals(false, response.jsonPath().getBoolean("accountVerificationInProgress"));
+		assertEquals(null, response.jsonPath().getString("companyApproved"));
+		assertEquals(null, response.jsonPath().getString("accountVerificationInProgress"));
 	}
 	
 	//empty shipper location
@@ -313,10 +322,7 @@ public class ApiTestRestAssured{
         String inputJson = mapToJson(postshipper);
         Response response = (Response) RestAssured.given().header("", "").body(inputJson).header("accept", "application/json")
 				.header("Content-Type", "application/json").post().then().extract().response();
-        
-        System.err.println("**********************");
-        System.err.println("a: " + response.jsonPath().getString("phoneNo"));
-        System.err.println("**********************");
+
         assertEquals(200, response.statusCode());
         assertEquals(CommonConstants.ERROR, response.jsonPath().getString("status"));
         assertEquals(CommonConstants.EMPTY_SHIPPER_LOCATION_ERROR, response.jsonPath().getString("message"));
@@ -325,15 +331,15 @@ public class ApiTestRestAssured{
 		assertEquals(null, response.jsonPath().getString("phoneNo"));
 		assertEquals(null, response.jsonPath().getString("kyc"));
 		assertEquals(null, response.jsonPath().getString("shipperLocation"));
-		assertEquals(false, response.jsonPath().getBoolean("companyApproved"));
-		assertEquals(false, response.jsonPath().getBoolean("accountVerificationInProgress"));
+		assertEquals(null, response.jsonPath().getString("companyApproved"));
+		assertEquals(null, response.jsonPath().getString("accountVerificationInProgress"));
 	}
 	
 	//update success
 	@Test
 	@Order(8)
 	public void updateshippersuccess() throws Exception{
-		UpdateShipper updateshipper = new UpdateShipper("person11","company11",null,"link11", "Nagpur", true, true);
+		UpdateShipper updateshipper = new UpdateShipper("person11","company11",null,"link11", null, true, true);
 
 		String inputJsonupdate = mapToJson(updateshipper);
 
@@ -372,8 +378,8 @@ public class ApiTestRestAssured{
 		assertEquals(null, responseupdate.jsonPath().getString("phoneNo"));
 		assertEquals(null, responseupdate.jsonPath().getString("kyc"));
 		assertEquals(null, responseupdate.jsonPath().getString("shipperLocation"));
-		assertEquals(false, responseupdate.jsonPath().getBoolean("companyApproved"));
-		assertEquals(false, responseupdate.jsonPath().getBoolean("accountVerificationInProgress"));
+		assertEquals(null, responseupdate.jsonPath().getString("companyApproved"));
+		assertEquals(null, responseupdate.jsonPath().getString("accountVerificationInProgress"));
 	}	
 	
 	//phone number cannot be updated
@@ -395,8 +401,8 @@ public class ApiTestRestAssured{
 		assertEquals(null, responseupdate.jsonPath().getString("phoneNo"));
 		assertEquals(null, responseupdate.jsonPath().getString("kyc"));
 		assertEquals(null, responseupdate.jsonPath().getString("shipperLocation"));
-		assertEquals(false, responseupdate.jsonPath().getBoolean("companyApproved"));
-		assertEquals(false, responseupdate.jsonPath().getBoolean("accountVerificationInProgress"));
+		assertEquals(null, responseupdate.jsonPath().getString("companyApproved"));
+		assertEquals(null, responseupdate.jsonPath().getString("accountVerificationInProgress"));
 	}
 
 	//shipper name cannot be empty
@@ -418,8 +424,8 @@ public class ApiTestRestAssured{
 		assertEquals(null, responseupdate.jsonPath().getString("phoneNo"));
 		assertEquals(null, responseupdate.jsonPath().getString("kyc"));
 		assertEquals(null, responseupdate.jsonPath().getString("shipperLocation"));
-		assertEquals(false, responseupdate.jsonPath().getBoolean("companyApproved"));
-		assertEquals(false, responseupdate.jsonPath().getBoolean("accountVerificationInProgress"));
+		assertEquals(null, responseupdate.jsonPath().getString("companyApproved"));
+		assertEquals(null, responseupdate.jsonPath().getString("accountVerificationInProgress"));
 	}
 	
 	//company name cannot be empty
@@ -441,8 +447,8 @@ public class ApiTestRestAssured{
 		assertEquals(null, responseupdate.jsonPath().getString("phoneNo"));
 		assertEquals(null, responseupdate.jsonPath().getString("kyc"));
 		assertEquals(null, responseupdate.jsonPath().getString("shipperLocation"));
-		assertEquals(false, responseupdate.jsonPath().getBoolean("companyApproved"));
-		assertEquals(false, responseupdate.jsonPath().getBoolean("accountVerificationInProgress"));
+		assertEquals(null, responseupdate.jsonPath().getString("companyApproved"));
+		assertEquals(null, responseupdate.jsonPath().getString("accountVerificationInProgress"));
 	}
 	
 	//location name cannot be empty
@@ -464,8 +470,8 @@ public class ApiTestRestAssured{
 		assertEquals(null, responseupdate.jsonPath().getString("phoneNo"));
 		assertEquals(null, responseupdate.jsonPath().getString("kyc"));
 		assertEquals(null, responseupdate.jsonPath().getString("shipperLocation"));
-		assertEquals(false, responseupdate.jsonPath().getBoolean("companyApproved"));
-		assertEquals(false, responseupdate.jsonPath().getBoolean("accountVerificationInProgress"));
+		assertEquals(null, responseupdate.jsonPath().getString("companyApproved"));
+		assertEquals(null, responseupdate.jsonPath().getString("accountVerificationInProgress"));
 	}
 	
 	//get all
@@ -486,22 +492,18 @@ public class ApiTestRestAssured{
 		
 		if(lastPageCount <= CommonConstants.pagesize-3)
 		{
-			System.err.println("1");
 			assertEquals(lastPageCount+3, response.jsonPath().getList("$").size());
 		}
 		else if(lastPageCount == CommonConstants.pagesize-2)
 		{
-			System.err.println("2 " + response.jsonPath().getList("$").size());
 			assertEquals(1, response.jsonPath().getList("$").size());
 		}
 		else if(lastPageCount == CommonConstants.pagesize-1)
 		{
-			System.err.println("3");
 			assertEquals(2, response.jsonPath().getList("$").size());
 		}
 		else if(lastPageCount == CommonConstants.pagesize)
 		{
-			System.err.println("4");
 			assertEquals(3, response.jsonPath().getList("$").size());
 		}
 	}
@@ -526,12 +528,10 @@ public class ApiTestRestAssured{
 		
 		if(lastPageCount <= CommonConstants.pagesize-1)
 		{
-			System.err.println("aa: " + response.jsonPath().getList("$").size());
 			assertEquals(lastPageCount+1, response.jsonPath().getList("$").size());
 		}
 		else if(lastPageCount == CommonConstants.pagesize)
 		{
-			System.err.println("4");
 			assertEquals(1, response.jsonPath().getList("$").size());
 		}
 	}
@@ -545,7 +545,7 @@ public class ApiTestRestAssured{
 		long lastPageCount = shippercount_companyapproved_false % CommonConstants.pagesize;
 		long page = shipperpagecount_companyapproved_false;
 
-		if (lastPageCount >= CommonConstants.pagesize)
+		if (lastPageCount >= CommonConstants.pagesize-1)
 			page++;
 		
 		Response response = RestAssured.given()
@@ -553,21 +553,17 @@ public class ApiTestRestAssured{
 				.param("companyApproved", false)
 				.header("accept", "application/json").header("Content-Type", "application/json").get().then().extract()
 				.response();
-		System.err.println("2a " + response.jsonPath().getList("companyApproved"));
 		
 		if(lastPageCount <= CommonConstants.pagesize-2)
 		{
-			System.err.println("2 " + response.jsonPath().getList("$").size());
 			assertEquals(lastPageCount+2, response.jsonPath().getList("$").size());
 		}
 		else if(lastPageCount == CommonConstants.pagesize-1)
 		{
-			System.err.println("3");
 			assertEquals(1, response.jsonPath().getList("$").size());
 		}
 		else if(lastPageCount == CommonConstants.pagesize)
 		{
-			System.err.println("4");
 			assertEquals(2, response.jsonPath().getList("$").size());
 		}
 	}
@@ -582,7 +578,6 @@ public class ApiTestRestAssured{
 				.param("companyApproved", false)
 				.header("accept", "application/json").header("Content-Type", "application/json").get().then().extract()
 				.response();
-		System.err.println("2a " + response.jsonPath().getList("companyApproved"));
 		
 		if(shipperpagecount_companyapproved_false>=1 || lastPageCount>=CommonConstants.pagesize-2)
 		{
@@ -605,9 +600,8 @@ public class ApiTestRestAssured{
 				.param("companyApproved", true)
 				.header("accept", "application/json").header("Content-Type", "application/json").get().then().extract()
 				.response();
-		System.err.println("2a " + response.jsonPath().getList("companyApproved"));
 		
-		if(shipperpagecount_companyapproved_true>=1 || lastPageCount>=CommonConstants.pagesize-2)
+		if(shipperpagecount_companyapproved_true>=1 || lastPageCount>=CommonConstants.pagesize-1)
 		{
 			assertEquals(CommonConstants.pagesize, response.jsonPath().getList("$").size());
 		}
@@ -654,10 +648,6 @@ public class ApiTestRestAssured{
 		assertEquals("Nagpur", response.jsonPath().getString("shipperLocation"));
 		assertEquals(true, response.jsonPath().getBoolean("companyApproved"));
 		assertEquals(true, response.jsonPath().getBoolean("accountVerificationInProgress"));
-		
-		System.err.println("********************** get by shipper id ");
-        System.err.println("a: " + response.asString());
-        System.err.println("**********************");
 	}
 	
 	//getby shipperid fail
@@ -666,11 +656,8 @@ public class ApiTestRestAssured{
 	public void getshipperbyshipperid_fail() throws Exception
 	{
 		String shipperid = "shipperrr:0de885e0-5f43-4c68-8dde-0000000000001";
-		Response response = RestAssured.given().header("", "").get("/" + shipperid).then().extract().response();
-		
-		System.err.println("**********************");
-        System.err.println("a: " + response.asString());
-        System.err.println("**********************");
+		Response response = RestAssured.given().header("", "")
+				.get("/" + shipperid).then().extract().response();
 		
 		assertEquals(200, response.statusCode());
 		assertEquals("", response.asString());

@@ -22,10 +22,6 @@ public class Shipper {
 	private Long phoneNo;
 	private String kyc;
 	private String shipperLocation;
-	
-	@Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
-	private boolean companyApproved;
-	
-	@Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
-	private boolean accountVerificationInProgress;
+	private Boolean companyApproved;
+	private Boolean accountVerificationInProgress;
 }

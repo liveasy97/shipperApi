@@ -51,6 +51,17 @@ public class TestShipperDao {
 		assertThat(getFromDb).isEqualTo(savedInDb);
 	}
 	
+	//find fail
+	@Test
+	public void findShipperByPhoneNofail()
+	{
+		List<Shipper> listshipper = createShippers();  
+
+		Shipper savedInDb = entityManager.persist(listshipper.get(0));
+		Shipper getFromDb = shipperdao.findShipperByPhoneNo(9999999992L);
+		assertThat(getFromDb).isEqualTo(null);
+	}
+	
 	@Test
 	public void getAll()
 	{
@@ -72,7 +83,6 @@ public class TestShipperDao {
 		
 		List<Shipper> getFromDb3 = shipperdao.getAll(thirdPage);
 		assertThat(getFromDb3.size()).isEqualTo(0);
-		
 	}
 	
 	@Test

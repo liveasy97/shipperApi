@@ -40,7 +40,6 @@ public class TestShipperService {
 	@Order(1)
 	public void addShippersuccess()
 	{
-		System.err.println("************************");
 		PostShipper postshipper = new PostShipper("person1","company1",(Long) 9999999991L,"link1", "Nagpur");
 		
 		ShipperCreateResponse shippercreateresponse = new ShipperCreateResponse(CommonConstants.PENDING, CommonConstants.APPROVE_REQUEST, 
@@ -52,9 +51,6 @@ public class TestShipperService {
 		
 		ShipperCreateResponse shippercreateresponseres = shipperservice.addShipper(postshipper);
 		shippercreateresponseres.setShipperId("shipper:0de885e0-5f43-4c68-8dde-0000000000001");
-		System.err.println("************************");
-		System.err.println("a: " + shippercreateresponse);
-		System.err.println("a: " + shippercreateresponseres);
 		
 		assertEquals(shippercreateresponse, shippercreateresponseres);
 	}
@@ -64,16 +60,13 @@ public class TestShipperService {
 	@Order(2)
 	public void addShipperphonenonull()
 	{
-		System.err.println("************************");
 		PostShipper postshipper = new PostShipper("person1","company1", null,"link1", "Nagpur");
 		
-		ShipperCreateResponse shippercreateresponse = new ShipperCreateResponse(CommonConstants.ERROR, CommonConstants.PHONE_NUMBER_ERROR, 
-				null, null, null, null, null, null, false, false);
+		ShipperCreateResponse shippercreateresponse = new ShipperCreateResponse(CommonConstants.ERROR,
+				CommonConstants.PHONE_NUMBER_ERROR, 
+				null, null, null, null, null, null, null, null);
 		
 		ShipperCreateResponse shippercreateresponseres = shipperservice.addShipper(postshipper);
-		System.err.println("************************");
-		System.err.println("a: " + shippercreateresponse);
-		System.err.println("a: " + shippercreateresponseres);
 		
 		assertEquals(shippercreateresponse, shippercreateresponseres);
 	}	
@@ -83,16 +76,12 @@ public class TestShipperService {
 	@Order(3)
 	public void addShipperinvalidphoneno()
 	{
-		System.err.println("************************");
 		PostShipper postshipper = new PostShipper("person1","company1", (Long) 999999999L,"link1", "Nagpur");
 		
 		ShipperCreateResponse shippercreateresponse = new ShipperCreateResponse(CommonConstants.ERROR, CommonConstants.INCORRECT_PHONE_NUMBER, 
-				null, null, null, null, null, null, false, false);
+				null, null, null, null, null, null, null, null);
 		
 		ShipperCreateResponse shippercreateresponseres = shipperservice.addShipper(postshipper);
-		System.err.println("************************");
-		System.err.println("a: " + shippercreateresponse);
-		System.err.println("a: " + shippercreateresponseres);
 		
 		assertEquals(shippercreateresponse, shippercreateresponseres);
 	}	
@@ -103,7 +92,6 @@ public class TestShipperService {
 	@Order(4)
 	public void addShipperphonenopresent()
 	{
-		System.err.println("************************");
 		PostShipper postshipper = new PostShipper("person1","company1",(Long) 9999999991L,"link1", "Nagpur");
 		
 		ShipperCreateResponse shippercreateresponse = new ShipperCreateResponse(CommonConstants.ERROR, CommonConstants.ACCOUNT_EXIST, 
@@ -115,10 +103,6 @@ public class TestShipperService {
 		
 		ShipperCreateResponse shippercreateresponseres = shipperservice.addShipper(postshipper);
 		
-		System.err.println("************************");
-		System.err.println("a: " + shippercreateresponse);
-		System.err.println("a: " + shippercreateresponseres);
-		
 		assertEquals(shippercreateresponse, shippercreateresponseres);
 	}
 	
@@ -127,18 +111,13 @@ public class TestShipperService {
 	@Order(5)
 	public void addShippershippernameempty()
 	{
-		System.err.println("************************");
 		PostShipper postshipper = new PostShipper("","company1",(Long) 9999999991L,"link1", "Nagpur");
 		
 		ShipperCreateResponse shippercreateresponse = new ShipperCreateResponse(CommonConstants.ERROR, CommonConstants.EMPTY_NAME_ERROR, 
-				null, null, null, null, null, null, false, false);
+				null, null, null, null, null, null, null, null);
 		
 		when(shipperdao.findByPhoneNo((Long) 9999999991L)).thenReturn(null);
 		ShipperCreateResponse shippercreateresponseres = shipperservice.addShipper(postshipper);
-		
-		System.err.println("************************");
-		System.err.println("a: " + shippercreateresponse);
-		System.err.println("a: " + shippercreateresponseres);
 		
 		assertEquals(shippercreateresponse, shippercreateresponseres);
 	}
@@ -148,18 +127,13 @@ public class TestShipperService {
 	@Order(6)
 	public void addShippercompanynameempty()
 	{
-		System.err.println("************************");
 		PostShipper postshipper = new PostShipper("person1","",(Long) 9999999991L,"link1", "Nagpur");
 		
 		ShipperCreateResponse shippercreateresponse = new ShipperCreateResponse(CommonConstants.ERROR, CommonConstants.EMPTY_COMPANY_NAME_ERROR, 
-				null, null, null, null, null, null, false, false);
+				null, null, null, null, null, null, null, null);
 		
 		when(shipperdao.findByPhoneNo((Long) 9999999991L)).thenReturn(null);
 		ShipperCreateResponse shippercreateresponseres = shipperservice.addShipper(postshipper);
-		
-		System.err.println("************************");
-		System.err.println("a: " + shippercreateresponse);
-		System.err.println("a: " + shippercreateresponseres);
 		
 		assertEquals(shippercreateresponse, shippercreateresponseres);
 	}
@@ -169,18 +143,13 @@ public class TestShipperService {
 	@Order(7)
 	public void addShipperlocationempty()
 	{
-		System.err.println("************************");
 		PostShipper postshipper = new PostShipper("person1","company1",(Long) 9999999991L,"link1", "");
 		
 		ShipperCreateResponse shippercreateresponse = new ShipperCreateResponse(CommonConstants.ERROR, CommonConstants.EMPTY_SHIPPER_LOCATION_ERROR, 
-				null, null, null, null, null, null, false, false);
+				null, null, null, null, null, null, null, null);
 	
 		when(shipperdao.findByPhoneNo((Long) 9999999991L)).thenReturn(null);
 		ShipperCreateResponse shippercreateresponseres = shipperservice.addShipper(postshipper);
-		
-		System.err.println("************************");
-		System.err.println("a: " + shippercreateresponse);
-		System.err.println("a: " + shippercreateresponseres);
 		
 		assertEquals(shippercreateresponse, shippercreateresponseres);
 	}
@@ -266,10 +235,7 @@ public class TestShipperService {
 		when(shipperdao.save(createShippers().get(0))).thenReturn(createShippers().get(0));
 		
 		ShipperUpdateResponse result = shipperservice.updateShipper("shipper:0de885e0-5f43-4c68-8dde-0000000000001", updateshipper);
-		
-		System.err.println("************************123");
-		System.err.println("a: " + result);
-		System.err.println("a: " + updateresponse);
+
 		assertEquals(updateresponse, result);
 	}
 	
@@ -281,16 +247,13 @@ public class TestShipperService {
 		UpdateShipper updateshipper = new UpdateShipper("person1","company1",(Long) 9999999991L,"link1", "Nagpur", true, true);
 		
 		ShipperUpdateResponse updateresponse = new ShipperUpdateResponse(CommonConstants.ERROR, CommonConstants.PHONE_NUMBER_UPDATE_ERROR, 
-				null, null, null, null, null, null, false, false);
+				null, null, null, null, null, null, null, null);
 		
 		when(shipperdao.findById("shipper:0de885e0-5f43-4c68-8dde-0000000000001")).thenReturn(Optional.of(createShippers().get(0)));
 		when(shipperdao.save(createShippers().get(0))).thenReturn(createShippers().get(0));
 		
 		ShipperUpdateResponse result = shipperservice.updateShipper("shipper:0de885e0-5f43-4c68-8dde-0000000000001", updateshipper);
-		
-		System.err.println("************************12123");
-		System.err.println("a: " + result);
-		System.err.println("a: " + updateresponse);
+
 		assertEquals(updateresponse, result);
 	}
 	
@@ -302,16 +265,13 @@ public class TestShipperService {
 		UpdateShipper updateshipper = new UpdateShipper("","company1",null,"link1", "Nagpur", true, true);
 		
 		ShipperUpdateResponse updateresponse = new ShipperUpdateResponse(CommonConstants.ERROR, CommonConstants.EMPTY_NAME_ERROR, 
-				null, null, null, null, null, null, false, false);
+				null, null, null, null, null, null, null, null);
 		
 		when(shipperdao.findById("shipper:0de885e0-5f43-4c68-8dde-0000000000001")).thenReturn(Optional.of(createShippers().get(0)));
 		when(shipperdao.save(createShippers().get(0))).thenReturn(createShippers().get(0));
 		
 		ShipperUpdateResponse result = shipperservice.updateShipper("shipper:0de885e0-5f43-4c68-8dde-0000000000001", updateshipper);
-		
-		System.err.println("************************12123");
-		System.err.println("a: " + result);
-		System.err.println("a: " + updateresponse);
+
 		assertEquals(updateresponse, result);
 	}
 	
@@ -323,16 +283,13 @@ public class TestShipperService {
 		UpdateShipper updateshipper = new UpdateShipper("person1","",null,"link1", "Nagpur", true, true);
 		
 		ShipperUpdateResponse updateresponse = new ShipperUpdateResponse(CommonConstants.ERROR, CommonConstants.EMPTY_COMPANY_NAME_ERROR, 
-				null, null, null, null, null, null, false, false);
+				null, null, null, null, null, null, null, null);
 		
 		when(shipperdao.findById("shipper:0de885e0-5f43-4c68-8dde-0000000000001")).thenReturn(Optional.of(createShippers().get(0)));
 		when(shipperdao.save(createShippers().get(0))).thenReturn(createShippers().get(0));
 		
 		ShipperUpdateResponse result = shipperservice.updateShipper("shipper:0de885e0-5f43-4c68-8dde-0000000000001", updateshipper);
-		
-		System.err.println("************************555");
-		System.err.println("a: " + result);
-		System.err.println("a: " + updateresponse);
+
 		assertEquals(updateresponse, result);
 	}
 	
@@ -344,16 +301,13 @@ public class TestShipperService {
 		UpdateShipper updateshipper = new UpdateShipper("person1","company1",null,"link1", "", true, true);
 		
 		ShipperUpdateResponse updateresponse = new ShipperUpdateResponse(CommonConstants.ERROR, CommonConstants.EMPTY_SHIPPER_LOCATION_ERROR, 
-				null, null, null, null, null, null, false, false);
+				null, null, null, null, null, null, null, null);
 		
 		when(shipperdao.findById("shipper:0de885e0-5f43-4c68-8dde-0000000000001")).thenReturn(Optional.of(createShippers().get(0)));
 		when(shipperdao.save(createShippers().get(0))).thenReturn(createShippers().get(0));
 		
 		ShipperUpdateResponse result = shipperservice.updateShipper("shipper:0de885e0-5f43-4c68-8dde-0000000000001", updateshipper);
-		
-		System.err.println("************************666");
-		System.err.println("a: " + result);
-		System.err.println("a: " + updateresponse);
+
 		assertEquals(updateresponse, result);
 	}
 	
@@ -370,10 +324,7 @@ public class TestShipperService {
 		when(shipperdao.save(createShippers().get(0))).thenReturn(createShippers().get(0));
 		
 		ShipperUpdateResponse result = shipperservice.updateShipper("shipper:0de885e0-5f43-4c68-8dde-0000000000001", updateshipper);
-		
-		System.err.println("************************666");
-		System.err.println("a: " + result);
-		System.err.println("a: " + updateresponse);
+
 		assertEquals(updateresponse, result);
 	}
 	
@@ -385,19 +336,15 @@ public class TestShipperService {
 		UpdateShipper updateshipper = new UpdateShipper("person11","company11",null,"link11", "Nagpur", true, true);
 		
 		ShipperUpdateResponse updateresponse = new ShipperUpdateResponse(CommonConstants.NOT_FOUND, CommonConstants.ACCOUNT_NOT_EXIST, 
-				null, null, null, null, null, null, false, false);
+				null, null, null, null, null, null, null, null);
 		
 		when(shipperdao.findById("shipper:0de885e0-5f43-4c68-8dde-0000000000001")).thenReturn(Optional.empty());
 		when(shipperdao.save(createShippers().get(0))).thenReturn(createShippers().get(0));
 		
 		ShipperUpdateResponse result = shipperservice.updateShipper("shipper:0de885e0-5f43-4c68-8dde-0000000000001", updateshipper);
-		
-		System.err.println("************************123");
-		System.err.println("a: " + result);
-		System.err.println("a: " + updateresponse);
+
 		assertEquals(updateresponse, result);
 	}
-	
 	
 	//delete pass
 	@Test

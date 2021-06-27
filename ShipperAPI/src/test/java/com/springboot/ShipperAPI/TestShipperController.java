@@ -78,10 +78,7 @@ public class TestShipperController {
 		MockHttpServletResponse response = result.getResponse();
 
 		String outputInJson = response.getContentAsString();
-		
-		System.err.println("**********");
-		System.err.println("a: " + outputInJson);
-		System.err.println("b: " + expectedJson);
+
 		assertThat(outputInJson).isEqualTo(expectedJson);
 		assertEquals(HttpStatus.OK.value(), response.getStatus());
 	}
@@ -103,15 +100,9 @@ public class TestShipperController {
 		List<Shipper> shippers1 = shippers.subList(0, 2);
 		String expectedJson = mapToJson(shippers1);
 		String outputInJson = result.getResponse().getContentAsString();
-
-		System.err.println("**********");
-		System.err.println("a: " + outputInJson);
-		System.err.println("b: " + expectedJson);
 		
 		assertEquals(expectedJson, outputInJson);
-		
-		MockHttpServletResponse response1 = result.getResponse();
-		assertEquals(HttpStatus.OK.value(), response1.getStatus());
+		assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
 	}
 	
 	@Test
@@ -129,10 +120,6 @@ public class TestShipperController {
 		
 		String expectedJson = mapToJson(shippers);
 		String outputInJson = result.getResponse().getContentAsString();
-
-		System.err.println("**********");
-		System.err.println("a: " + outputInJson);
-		System.err.println("b: " + expectedJson);
 		
 		assertEquals(expectedJson, outputInJson);
 		
@@ -182,10 +169,6 @@ public class TestShipperController {
 		String expectedJson = mapToJson(updateresponse);
 		String outputInJson = result.getResponse().getContentAsString();
 		
-		System.err.println("**********");
-		System.err.println("a: " + outputInJson);
-		System.err.println("b: " + expectedJson);
-
 		assertEquals(expectedJson, outputInJson);
 		
 		MockHttpServletResponse response1 = result.getResponse();
@@ -208,10 +191,6 @@ public class TestShipperController {
 		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
 		String expectedJson = mapToJson(deleteResponse);
 		String outputInJson = result.getResponse().getContentAsString();
-		
-		System.err.println("**********");
-		System.err.println("a: " + outputInJson);
-		System.err.println("b: " + expectedJson);
 
 		assertEquals(expectedJson, outputInJson);
 		

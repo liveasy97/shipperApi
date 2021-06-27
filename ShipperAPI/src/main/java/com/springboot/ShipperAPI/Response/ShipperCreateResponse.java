@@ -17,6 +17,6 @@ public class ShipperCreateResponse {
 	private Long phoneNo;
 	private String kyc;
 	private String shipperLocation;
-	private boolean companyApproved;
-	private boolean accountVerificationInProgress;
+	private Boolean companyApproved;
+	private Boolean accountVerificationInProgress;
 }
