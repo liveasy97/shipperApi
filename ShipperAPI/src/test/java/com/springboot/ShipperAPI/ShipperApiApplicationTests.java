@@ -1,28 +1,10 @@
 package com.springboot.ShipperAPI;
 
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit4.SpringRunner;
 
-import com.springboot.ShipperAPI.Dao.ShipperDao;
-import com.springboot.ShipperAPI.Entity.Shipper;
-import com.springboot.ShipperAPI.Response.ShipperCreateResponse;
-import com.springboot.ShipperAPI.Response.ShipperDeleteResponse;
-import com.springboot.ShipperAPI.Response.ShipperUpdateResponse;
-import com.springboot.ShipperAPI.Service.ShipperService;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
 class ShipperApiApplicationTests {
 
