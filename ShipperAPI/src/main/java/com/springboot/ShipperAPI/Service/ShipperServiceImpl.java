@@ -22,8 +22,6 @@ import com.springboot.ShipperAPI.Response.ShipperUpdateResponse;
 
 @Service
 public class ShipperServiceImpl implements ShipperService {
-
-	String companyName = null, name = null, shipperLocation = null;
 	
 	@Autowired
 	ShipperDao shipperdao;
@@ -31,6 +29,7 @@ public class ShipperServiceImpl implements ShipperService {
 	@Override
 	public ShipperCreateResponse addShipper(PostShipper addShipper) {
 		// TODO Auto-generated method stub
+		String companyName = null, name = null, shipperLocation = null;
 		Shipper shipper = new Shipper();
 		ShipperCreateResponse createResponse = new ShipperCreateResponse();
 		
@@ -139,7 +138,7 @@ public class ShipperServiceImpl implements ShipperService {
 	public Shipper getOneShipper(String shipperId) {
 		Optional<Shipper> S = shipperdao.findById(shipperId);
 		if(S.isPresent()) {
-			return shipperdao.findById(shipperId).get();
+			return S.get();
 		}
 		return null;
 	}
