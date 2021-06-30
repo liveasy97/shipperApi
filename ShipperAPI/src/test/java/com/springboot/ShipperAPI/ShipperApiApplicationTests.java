@@ -22,8 +22,8 @@ import com.springboot.ShipperAPI.Response.ShipperDeleteResponse;
 import com.springboot.ShipperAPI.Response.ShipperUpdateResponse;
 import com.springboot.ShipperAPI.Service.ShipperService;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
+//@RunWith(SpringRunner.class)
+//@SpringBootTest
 class ShipperApiApplicationTests {
 
 	/*

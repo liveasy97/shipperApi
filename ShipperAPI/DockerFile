@@ -1,5 +1,5 @@
 FROM adoptopenjdk/openjdk11:alpine-jre
 EXPOSE 8080
 VOLUME /tmp
-ADD target/shipperAPI.jar shipper.jar
+ADD ShipperAPI.jar shipper.jar
 ENTRYPOINT ["java","-jar","/shipper.jar"]
