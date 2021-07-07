@@ -30,7 +30,7 @@ jobs:
     - run: cd ~/actions-runner/deploy/shipperApi/shipperApi/ShipperAPI
     - run: sudo docker container stop shipper-container || true
     - run: sudo docker container stop shipper-postgres || true
-    - run: sudo docker container prune -f
+    - run: sudo docker container rm shipper-postgres shipper-container || true
     - run: sudo docker image rm shipper || true
     - run: sudo docker build -t shipper .
     - run: sudo docker run --name shipper-postgres -e POSTGRES_ROOT_PASSWORD=postgres -e POSTGRES_DATABASE=postgres -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -d shipperpostgres:latest
