@@ -28,7 +28,7 @@ public class ShipperController {
 	
 	@GetMapping("/home")
 	public String home() {
-		return "Welcome to loadApi git actions second check...!!!";
+		return "Welcome to shipperApi git actions test...!!!";
 	}
 	
 	
