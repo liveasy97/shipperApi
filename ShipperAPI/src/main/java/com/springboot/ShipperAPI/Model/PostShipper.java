@@ -7,6 +7,6 @@ public class PostShipper {
 	private String shipperName;
 	private String companyName;
 	private String shipperLocation;
-	private Long phoneNo;
+	private String phoneNo;
 	private String kyc;
 }
