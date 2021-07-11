@@ -19,7 +19,8 @@ public class Shipper {
 	private String companyName;
 	@Column(unique=true)
 	@NotBlank(message = "Phone no. cannot be blank!")
-	@Pattern(regexp="(^$|[0-9]{10})", message="must be a 10 digit number")
+	//	"^[6-9]\\d{9}$", "(^$|[0-9]{10})"
+	@Pattern(regexp="(^[6-9]\\d{9}$)", message="Please enter a valid mobile number") 
 	private String phoneNo;
 	private String kyc;
 	private String shipperLocation;

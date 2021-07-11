@@ -46,14 +46,14 @@ public class ShipperController {
 			@RequestParam(required = false) Boolean companyApproved,
 			@RequestParam(required = false) Integer pageNo) {
 		log.info("Get with Params Controller Started");
-		return new ResponseEntity<>(service.getShippers(companyApproved, pageNo),HttpStatus.FOUND);
+		return new ResponseEntity<>(service.getShippers(companyApproved, pageNo),HttpStatus.OK);
 
 	}
 
 	@GetMapping("/shipper/{shipperId}")
 	private ResponseEntity<Object> getOneShipper(@PathVariable String shipperId) {
 		log.info("Get Controller Started");
-		return new ResponseEntity<>(service.getOneShipper(shipperId),HttpStatus.FOUND);
+		return new ResponseEntity<>(service.getOneShipper(shipperId),HttpStatus.OK);
 	}
 
 
