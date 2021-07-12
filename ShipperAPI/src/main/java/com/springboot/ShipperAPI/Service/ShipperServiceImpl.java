@@ -28,7 +28,7 @@ import com.springboot.ShipperAPI.Exception.EntityNotFoundException;
 @Service
 public class ShipperServiceImpl implements ShipperService {
 
-	String temp="";
+
 
 	@Autowired
 	ShipperDao shipperdao;
@@ -38,6 +38,7 @@ public class ShipperServiceImpl implements ShipperService {
 	public ShipperCreateResponse addShipper(PostShipper postshipper) {
 		log.info("addShipper service is started");
 
+		String temp="";
 		Shipper shipper = new Shipper();
 		ShipperCreateResponse response = new ShipperCreateResponse();
 
@@ -135,7 +136,7 @@ public class ShipperServiceImpl implements ShipperService {
 			throw new EntityNotFoundException(Shipper.class, "id",shipperId.toString());
 		}
 
-
+		String temp="";
 		shipper = S.get();
 
 		//				 ????????????????????
