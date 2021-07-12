@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.springboot.ShipperAPI.Entity.Shipper;
+import com.springboot.ShipperAPI.Model.PostShipper;
 import com.springboot.ShipperAPI.Model.UpdateShipper;
 import com.springboot.ShipperAPI.Service.ShipperService;
 
@@ -36,7 +37,7 @@ public class ShipperController {
 
 
 	@PostMapping("/shipper")
-	public ResponseEntity<Object> addShipper(@Valid @RequestBody Shipper postShipper) {
+	public ResponseEntity<Object> addShipper(@Valid @RequestBody PostShipper postShipper) {
 		log.info("Post Controller Started");
 		return new ResponseEntity<>(service.addShipper(postShipper),HttpStatus.CREATED);
 	}

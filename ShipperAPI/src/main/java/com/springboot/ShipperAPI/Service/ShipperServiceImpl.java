@@ -15,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.springboot.ShipperAPI.Constants.CommonConstants;
 import com.springboot.ShipperAPI.Dao.ShipperDao;
 import com.springboot.ShipperAPI.Entity.Shipper;
+import com.springboot.ShipperAPI.Model.PostShipper;
 import com.springboot.ShipperAPI.Model.UpdateShipper;
 import com.springboot.ShipperAPI.Response.ShipperCreateResponse;
 import com.springboot.ShipperAPI.Response.ShipperUpdateResponse;
@@ -34,45 +35,58 @@ public class ShipperServiceImpl implements ShipperService {
 
 	@Transactional(rollbackFor = Exception.class)
 	@Override
-	public ShipperCreateResponse addShipper(Shipper shipper) {
+	public ShipperCreateResponse addShipper(PostShipper postshipper) {
 		log.info("addShipper service is started");
-		ShipperCreateResponse createResponse = new ShipperCreateResponse();
 
-		temp=shipper.getShipperName();
+		Shipper shipper = new Shipper();
+		ShipperCreateResponse response = new ShipperCreateResponse();
+
+		temp="shipper:"+UUID.randomUUID();
+		shipper.setShipperId(temp);
+		response.setShipperId(temp);
+
+		temp=postshipper.getShipperName();
 		if (StringUtils.isNotBlank(temp)) {
 			shipper.setShipperName(temp.trim());
+			response.setShipperName(temp.trim());
 		}
 
-		temp=shipper.getCompanyName();
+		temp=postshipper.getCompanyName();
 		if(StringUtils.isNotBlank(temp)) {
 			shipper.setCompanyName(temp.trim());
+			response.setCompanyName(temp.trim());
 		}
 
-		temp=shipper.getShipperLocation();
+		temp=postshipper.getShipperLocation();
 		if(StringUtils.isNotBlank(temp)) {
 			shipper.setShipperLocation(temp.trim());
+			response.setShipperLocation(temp.trim());
 		}
 
-		shipper.setShipperId("shipper:"+UUID.randomUUID());
+		temp=postshipper.getPhoneNo();
+		shipper.setPhoneNo(temp);
+		response.setPhoneNo(temp);
+
+		temp=postshipper.getKyc();
+		if(StringUtils.isNotBlank(temp)) {
+			shipper.setKyc(temp.trim());
+			response.setKyc(temp.trim());
+		}
+
 		shipper.setCompanyApproved(false);
+		response.setCompanyApproved(false);
+
 		shipper.setAccountVerificationInProgress(false);
+		response.setAccountVerificationInProgress(false);
 
 		shipperdao.save(shipper);
 		log.info("shipper is saved to the database");
 
-		createResponse.setStatus(CommonConstants.PENDING);
-		createResponse.setMessage(CommonConstants.APPROVE_REQUEST);
-		createResponse.setShipperId(shipper.getShipperId());
-		createResponse.setPhoneNo(shipper.getPhoneNo());
-		createResponse.setShipperName(shipper.getShipperName());
-		createResponse.setCompanyName(shipper.getCompanyName());
-		createResponse.setShipperLocation(shipper.getShipperLocation());
-		createResponse.setKyc(shipper.getKyc());
-		createResponse.setCompanyApproved(shipper.isCompanyApproved());
-		createResponse.setAccountVerificationInProgress(shipper.isAccountVerificationInProgress());
+		response.setStatus(CommonConstants.PENDING);
+		response.setMessage(CommonConstants.APPROVE_REQUEST);
 
 		log.info("addShipper response is returned");
-		return createResponse;
+		return response;
 
 	}
 
