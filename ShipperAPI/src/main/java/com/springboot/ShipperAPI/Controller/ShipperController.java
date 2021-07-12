@@ -32,7 +32,7 @@ public class ShipperController {
 
 	@GetMapping("/home")
 	public String home() {
-		return "Welcome to shipperApi git actions test...!!!";
+		return "Welcome to shipperApi git actions test 2...!!!";
 	}
 
 
