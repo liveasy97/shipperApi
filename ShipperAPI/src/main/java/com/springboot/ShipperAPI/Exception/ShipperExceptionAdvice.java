@@ -224,6 +224,14 @@ public class ShipperExceptionAdvice extends ResponseEntityExceptionHandler{
 		return buildResponseEntity(shipperErrorResponse);
 	}
 
+	@ExceptionHandler(BusinessException.class)
+	protected ResponseEntity<Object> handleBusinessException(BusinessException ex){
+		log.error("handleBusiness Exception is started");
+		ShipperErrorResponse response = new ShipperErrorResponse(HttpStatus.UNPROCESSABLE_ENTITY);
+		response.setMessage(ex.getMessage());
+		return buildResponseEntity(response);
+	}
+
 	@ExceptionHandler(Exception.class)  
 	public final ResponseEntity<Object> handleAllExceptions(Exception ex, WebRequest request)  
 	{  

@@ -22,6 +22,7 @@ import com.springboot.ShipperAPI.Response.ShipperUpdateResponse;
 
 import lombok.extern.slf4j.Slf4j;
 
+import com.springboot.ShipperAPI.Exception.BusinessException;
 import com.springboot.ShipperAPI.Exception.EntityNotFoundException;
 
 @Slf4j
@@ -139,12 +140,9 @@ public class ShipperServiceImpl implements ShipperService {
 		String temp="";
 		shipper = S.get();
 
-		//				 ????????????????????
-		//		if (updateShipper.getPhoneNo() != null) {			
-		//			updateResponse.setStatus(CommonConstants.ERROR);
-		//			updateResponse.setMessage(CommonConstants.PHONE_NUMBER_UPDATE_ERROR);
-		//			return updateResponse;
-		//		}
+		if (updateShipper.getPhoneNo() != null) {			
+			throw new BusinessException("Phone no. can't be updated");
+		}
 
 		if (updateShipper.getShipperName() != null) {
 			shipper.setShipperName(updateShipper.getShipperName().trim());
