@@ -53,7 +53,7 @@ public class ShipperController {
 
 	@GetMapping("/shipper/{shipperId}")
 	private ResponseEntity<Object> getOneShipper(@PathVariable String shipperId) {
-		log.info("Get Controller Started");
+		log.info("Get by shiperId Controller Started");
 		return new ResponseEntity<>(service.getOneShipper(shipperId),HttpStatus.OK);
 	}
 
