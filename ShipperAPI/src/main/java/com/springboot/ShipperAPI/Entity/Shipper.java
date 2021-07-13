@@ -4,6 +4,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
 import lombok.Data;
 
@@ -15,13 +17,17 @@ public class Shipper {
 	private String shipperId;
 	private String shipperName;
 	private String companyName;
-	private Long phoneNo;
+	@Column(unique=true)
+	@NotBlank(message = "Phone no. cannot be blank!")
+	//	"^[6-9]\\d{9}$", "(^$|[0-9]{10})"
+	@Pattern(regexp="(^[6-9]\\d{9}$)", message="Please enter a valid mobile number") 
+	private String phoneNo;
 	private String kyc;
 	private String shipperLocation;
-	
+
 	@Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
 	private boolean companyApproved;
-	
+
 	@Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
 	private boolean accountVerificationInProgress;
 }
