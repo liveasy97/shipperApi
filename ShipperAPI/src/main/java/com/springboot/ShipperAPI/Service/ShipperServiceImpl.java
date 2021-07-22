@@ -20,6 +20,7 @@ import com.springboot.ShipperAPI.Model.UpdateShipper;
 import com.springboot.ShipperAPI.Response.ShipperCreateResponse;
 import com.springboot.ShipperAPI.Response.ShipperUpdateResponse;
 
+
 import lombok.extern.slf4j.Slf4j;
 
 import com.springboot.ShipperAPI.Exception.BusinessException;
@@ -42,6 +43,20 @@ public class ShipperServiceImpl implements ShipperService {
 		String temp="";
 		Shipper shipper = new Shipper();
 		ShipperCreateResponse response = new ShipperCreateResponse();
+
+		Optional<Shipper> s = shipperdao.findShipperByPhoneNo(postshipper.getPhoneNo());
+		if (s.isPresent()) {
+			response.setShipperId(s.get().getShipperId());
+			response.setPhoneNo(s.get().getPhoneNo());
+			response.setShipperName(s.get().getShipperName());
+			response.setShipperLocation(s.get().getShipperLocation());
+			response.setCompanyName(s.get().getCompanyName());
+			response.setKyc(s.get().getKyc());
+			response.setCompanyApproved(s.get().isCompanyApproved());
+			response.setAccountVerificationInProgress(s.get().isAccountVerificationInProgress());
+			response.setMessage(CommonConstants.ACCOUNT_EXIST);
+			return response;
+		}
 
 		temp="shipper:"+UUID.randomUUID();
 		shipper.setShipperId(temp);
