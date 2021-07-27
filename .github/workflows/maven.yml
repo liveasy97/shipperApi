@@ -5,7 +5,7 @@ name: Java CI with Maven
 
 on:
   push:
-    branches: [ dev ]
+    branches: [ main ]
 
 defaults:
   run:
@@ -13,7 +13,7 @@ defaults:
     
 jobs:
   build:
-    runs-on: self-hosted
+    runs-on: ['self-hosted', 'Linux', 'X64']
 
     steps:
     - uses: actions/checkout@v2
@@ -33,6 +33,6 @@ jobs:
     - run: sudo docker container rm shipper-container || true
     - run: sudo docker image rm shipper || true
     - run: sudo docker build -t shipper .
-    - run: sudo docker start shipper-postgres || sudo docker run --name shipper-postgres -e POSTGRES_PASSWORD=postgres -d shipperpostgres:latest
+    - run: sudo docker start shipper-postgres || sudo docker run --name shipper-postgres -e POSTGRES_PASSWORD=postgres -d postgres
     - run: sudo docker run -p 8080:8080 --name shipper-container --link shipper-postgres:postgres shipper | echo "success" 
  
