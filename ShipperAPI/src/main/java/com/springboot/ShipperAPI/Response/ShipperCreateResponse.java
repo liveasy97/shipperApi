@@ -1,5 +1,9 @@
 package com.springboot.ShipperAPI.Response;
 
+import java.sql.Timestamp;
+
+import org.hibernate.annotations.CreationTimestamp;
+
 import lombok.Data;
 
 @Data
@@ -15,4 +19,5 @@ public class ShipperCreateResponse {
 	private String shipperLocation;
 	private boolean companyApproved;
 	private boolean accountVerificationInProgress;
+	public Timestamp timestamp;
 }

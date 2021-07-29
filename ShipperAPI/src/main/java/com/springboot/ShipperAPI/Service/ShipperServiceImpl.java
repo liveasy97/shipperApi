@@ -4,12 +4,16 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.apache.commons.lang3.StringUtils;
 
 import com.springboot.ShipperAPI.Constants.CommonConstants;
@@ -20,7 +24,6 @@ import com.springboot.ShipperAPI.Model.UpdateShipper;
 import com.springboot.ShipperAPI.Response.ShipperCreateResponse;
 import com.springboot.ShipperAPI.Response.ShipperUpdateResponse;
 
-
 import lombok.extern.slf4j.Slf4j;
 
 import com.springboot.ShipperAPI.Exception.BusinessException;
@@ -29,8 +32,6 @@ import com.springboot.ShipperAPI.Exception.EntityNotFoundException;
 @Slf4j
 @Service
 public class ShipperServiceImpl implements ShipperService {
-
-
 
 	@Autowired
 	ShipperDao shipperdao;
@@ -55,6 +56,7 @@ public class ShipperServiceImpl implements ShipperService {
 			response.setCompanyApproved(s.get().isCompanyApproved());
 			response.setAccountVerificationInProgress(s.get().isAccountVerificationInProgress());
 			response.setMessage(CommonConstants.ACCOUNT_EXIST);
+			response.setTimestamp(s.get().getTimestamp());
 			return response;
 		}
 
@@ -101,6 +103,7 @@ public class ShipperServiceImpl implements ShipperService {
 
 		response.setStatus(CommonConstants.PENDING);
 		response.setMessage(CommonConstants.APPROVE_REQUEST);
+		response.setTimestamp(shipper.getTimestamp());
 
 		log.info("addShipper response is returned");
 		return response;
@@ -109,20 +112,40 @@ public class ShipperServiceImpl implements ShipperService {
 
 	@Transactional(readOnly = true, rollbackFor = Exception.class)
 	@Override
-	public List<Shipper> getShippers(Boolean companyApproved, Integer pageNo) { 
+	public List<Shipper> getShippers(Boolean companyApproved, String phoneNo, Integer pageNo) { 
 		log.info("getShippers service started");
 		if(pageNo == null) {
 			pageNo = 0;
 		}
-		Pageable page = PageRequest.of(pageNo, 15);
+		Pageable page = PageRequest.of(pageNo, 15,  Sort.Direction.DESC, "timestamp");
+		
+		if(phoneNo != null) {
+			String validate = "[0-9]{10}$";
+			Pattern pattern = Pattern.compile(validate);
+			Matcher m = pattern.matcher(phoneNo);
+			if(m.matches()) {
+				if(shipperdao.findShipperByPhoneNo(phoneNo).isPresent()) {
+					List<Shipper> list = List.of(shipperdao.findShipperByPhoneNo(phoneNo).get());
+					return list;
+				}
+				else {
+					throw new EntityNotFoundException(Shipper.class, "phoneNo", phoneNo.toString());
+				}
+			}
+			else {
+				// MethodArgumentNotValidException
+				throw new BusinessException("Invalid mobile number");
+			}
+			
+		}
 
 		if(companyApproved == null) {
 			List<Shipper> shipperList = shipperdao.getAll(page);
-			Collections.reverse(shipperList);
+			//Collections.reverse(shipperList);
 			return shipperList;
 		} 
 		List<Shipper> shipperList = shipperdao.findByCompanyApproved(companyApproved, page);
-		Collections.reverse(shipperList);
+		//Collections.reverse(shipperList);
 		log.info("getShippers response returned");
 		return shipperList;
 	}
@@ -197,6 +220,7 @@ public class ShipperServiceImpl implements ShipperService {
 		updateResponse.setAccountVerificationInProgress(shipper.isAccountVerificationInProgress());
 		updateResponse.setStatus(CommonConstants.SUCCESS);
 		updateResponse.setMessage(CommonConstants.UPDATE_SUCCESS);
+		updateResponse.setTimestamp(shipper.getTimestamp());
 
 		log.info("updateShipper response is returned");
 		return updateResponse;
