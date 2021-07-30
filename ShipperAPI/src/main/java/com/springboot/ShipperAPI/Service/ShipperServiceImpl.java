@@ -120,7 +120,7 @@ public class ShipperServiceImpl implements ShipperService {
 		Pageable page = PageRequest.of(pageNo, 15,  Sort.Direction.DESC, "timestamp");
 		
 		if(phoneNo != null) {
-			String validate = "[0-9]{10}$";
+			String validate = "^[6-9]\\d{9}$";
 			Pattern pattern = Pattern.compile(validate);
 			Matcher m = pattern.matcher(phoneNo);
 			if(m.matches()) {
