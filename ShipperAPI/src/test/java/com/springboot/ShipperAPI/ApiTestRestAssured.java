@@ -77,7 +77,6 @@ public class ApiTestRestAssured{
 	public static void setup() throws Exception {
 		
 		RestAssured.baseURI = "http://localhost:8080/shipper";
-		//RestAssured.baseURI = "http://65.0.113.164:8080/shipper";
 		
 		//count all
 		Response response11;
