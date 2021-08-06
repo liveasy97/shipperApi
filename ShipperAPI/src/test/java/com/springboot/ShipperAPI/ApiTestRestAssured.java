@@ -32,15 +32,7 @@ import io.restassured.response.Response;
 
 /*
 
-System.err.println("*********0000******" + response.statusCode());
-        System.err.println(response.jsonPath().toString());
-        
-        String shipperid = response.jsonPath().getString("shipperId");
-        
-        System.err.println("***************" + response.statusCode());
-        System.err.println(response.jsonPath().toString());
-    	String sss = jsonPathEvaluator.get("$").toString();
-        System.err.println(sss);
+this file contains integrated testing
 
 */
 @TestMethodOrder(OrderAnnotation.class)
@@ -69,16 +61,15 @@ public class ApiTestRestAssured{
 	private static long shipperpagecount_companyapproved_false = 0;
 	private static long shipperpagecount_all = 0;
 	
-	private static int pagesize=15;
+	private static int pagesize=15, total_shipper_added=3;
 	
 	
-	
+	//this function will add three objects in database
 	@BeforeAll
 	public static void setup() throws Exception {
 		
 		RestAssured.baseURI = "http://localhost:8080/shipper";
 		
-		//count all
 		Response response11;
 		while (true)
 		{
@@ -93,7 +84,6 @@ public class ApiTestRestAssured{
 			shipperpagecount_all++;
 		}
 		
-		//company approved true
 		Response response22;
 		while (true) {
 			response22 = RestAssured.given().param("pageNo", shipperpagecount_companyapproved_true).param("companyApproved", true)
@@ -107,7 +97,6 @@ public class ApiTestRestAssured{
 			shipperpagecount_companyapproved_true++;
 		}
 		
-		//company approved false
 		Response response33;
 		while (true) {
 			response33 = RestAssured.given().param("pageNo", shipperpagecount_companyapproved_false).param("companyApproved", false)
@@ -172,7 +161,9 @@ public class ApiTestRestAssured{
 	}
 	
 
-	//add shipper success
+	//case: adding shipper successfully with all paramaters are not null
+	//adding compleate data in database
+	//getting proper response
 	@Test
 	@Order(1)
 	public void addshippersuccess1() throws Exception
@@ -202,9 +193,10 @@ public class ApiTestRestAssured{
 		assertEquals("Successfully deleted", response2.asString());
 	}
 	
-	
+	//case: adding shipper successfully with all paramaters are null except phone number
+	//getting response as all paramaters null except phoneNo
 	@Test
-	@Order(1)
+	@Order(2)
 	public void addshippersuccess2() throws Exception
 	{
 		PostShipper postshipper = new PostShipper(null,null, null, "9999999994", null);
@@ -230,10 +222,12 @@ public class ApiTestRestAssured{
 		assertEquals("Successfully deleted", response2.asString());
 	}
 	
-	//add shipper fail, phone number null
+	
+	//case: add shipper with phone number null and other paramaters are not null
+	//getting exception from annotation validation (Phone no. cannot be blank!)
 	@Test
-	@Order(2)
-	public void addshippersuccess3() throws Exception
+	@Order(3)
+	public void addshipperfail1() throws Exception
 	{
 		PostShipper postshipper = new PostShipper("person4","company4", "link4", null, "Surat");
         String inputJson = mapToJson(postshipper);
@@ -248,9 +242,10 @@ public class ApiTestRestAssured{
         		jsonPathEvaluator.get("shippererrorresponse.subErrors").toString());
 	}
 	
-	//add shipper fail phone number invalid (9 digit)
+	//case: add shipper with invalid phone number (9 digit) and all paramaters are not null
+	//getting response as exception from annotation validation (Please enter a valid mobile number)
 	@Test
-	@Order(3)
+	@Order(4)
 	public void addshippersuccess4() throws Exception
 	{
 		PostShipper postshipper = new PostShipper("person1","company1", "Nagpur","998999999","link1");
@@ -264,10 +259,11 @@ public class ApiTestRestAssured{
         		jsonPathEvaluator.get("shippererrorresponse.subErrors").toString());
 	}
 	
-	//add shipper fail account already exist
+	//case: add shipper with already exist phonenumber and all other values are not null
+	//getting result as messgae as Account already exist and already existed result
 	@Test
-	@Order(4)
-	public void addshippersuccess5() throws Exception
+	@Order(5)
+	public void addshipperfail2() throws Exception
 	{
 		PostShipper postshipper = new PostShipper("person1","company1", "Nagpur","9999999992","link1");
         String inputJson = mapToJson(postshipper);
@@ -279,9 +275,10 @@ public class ApiTestRestAssured{
         assertEquals("Account already exist", jsonPathEvaluator.get("message").toString());
 	}
 	
-	//empty shipper name
+	//case: adding shipper with empty shipper name and all other paramaters with valid value
+	//response with shipper name = null
 	@Test
-	@Order(5)
+	@Order(6)
 	public void addshippersuccess6() throws Exception
 	{
 		PostShipper postshipper = new PostShipper("","company1", "Nagpur","9999999900","link1");
@@ -308,9 +305,10 @@ public class ApiTestRestAssured{
 		assertEquals("Successfully deleted", response2.asString());
 	}
 	
-	//empty company name 
+	//case: adding shipper with empty company name and all other paramaters with valid value
+	//get shipper with company name null 
 	@Test
-	@Order(6)
+	@Order(7)
 	public void addshippersuccess7() throws Exception
 	{
 		PostShipper postshipper = new PostShipper("person1","", "Nagpur","9999999900","link1");
@@ -336,9 +334,10 @@ public class ApiTestRestAssured{
 		assertEquals("Successfully deleted", response2.asString());
 	}
 	
-	//empty shipper location
+	//case: adding shipper with empty location name and all other paramaters with valid value
+	// getting shipper with location null
 	@Test
-	@Order(7)
+	@Order(8)
 	public void addshippersuccess8() throws Exception
 	{
 		PostShipper postshipper = new PostShipper("person1","company1", "","9999999900","link1");
@@ -365,9 +364,11 @@ public class ApiTestRestAssured{
 	}
 	
 	
-	//update success
+	//case: updating shipper with all paramaters in update shipper request are not null except phone number
+	//updating shipper with proper request
+	//getting proper response
 	@Test
-	@Order(8)
+	@Order(9)
 	public void updateshippersuccess1() throws Exception{
 		UpdateShipper updateshipper = new UpdateShipper(null, "person11","company11", "link11", "Nagpur", true, true);
 
@@ -389,9 +390,11 @@ public class ApiTestRestAssured{
 	}
 	
 	
-	//all values null
+	//case: updating shipper with all paramaters in update shipper request are null
+	//updating shipper with all value null
+	//getting shipper with prexisted values
 	@Test
-	@Order(8)
+	@Order(10)
 	public void updateshippersuccess2() throws Exception{
 		UpdateShipper updateshipper = new UpdateShipper(null,null,null,null, null, null, null);
 
@@ -412,9 +415,12 @@ public class ApiTestRestAssured{
 		assertEquals(true, responseupdate.jsonPath().getBoolean("accountVerificationInProgress"));
 	}
 	
-	//update fail account not found 
+	//case: updating shipper with invalid(unavailable) pathvariable(shipperid)
+	//update fail account not found
+	//sending request with shipperid which is nor present in database
+	// getting response as exception (Shipper was not found for parameters {shipperid})
 	@Test
-	@Order(9)
+	@Order(11)
 	public void updateshipperfail1() throws Exception{
 		UpdateShipper updateshipper = new UpdateShipper(null, "person11","company11", "link11", "Nagpur", true, true);
 
@@ -425,14 +431,16 @@ public class ApiTestRestAssured{
 		
 		JsonPath jsonPathEvaluator = response.jsonPath();
 		
-		//assertEquals(HttpStatus.OK.value(), response.statusCode());
 		assertEquals(HttpStatus.NOT_FOUND.value(), response.statusCode());
         assertEquals("Shipper was not found for parameters {id=shipperrr:0de885e0-5f43-4c68-8dde-0000000000001}", jsonPathEvaluator.get("shippererrorresponse.message").toString());
-	}	
+	}
 	
-	//phone number cannot be updated
+	//case: updating shipper with valid(available) pathvariable(shipperid)
+	//were all the paramaters are not null including phone number
+	//sending update request with shipper no not null
+	//getting response as exception  {Error: Phone no. can't be updated}
 	@Test
-	@Order(10)
+	@Order(12)
 	public void updateshipperfail2() throws Exception{
 		UpdateShipper updateshipper = new UpdateShipper("9999999991", "person11","company11", "link11", "Nagpur", true, true);
 
@@ -447,12 +455,14 @@ public class ApiTestRestAssured{
 
 	}
 	
-	//doubt ?
-	//shipper name cannot be empty
+	//case: updating shipper with valid(available) pathvariable(shipperid)
+	//were all paramaters are not null except shipper name 
+	//sending shipper request with shippername as empty string
+	// getting update response as shipper with shippername as previously stored name
 	@Test
-	@Order(11)
-	public void updateshipperfail3() throws Exception{
-		UpdateShipper updateshipper = new UpdateShipper(null, null,"company11", "link11", "Nagpur", true, true);
+	@Order(13)
+	public void updateshippersuccess3() throws Exception{
+		UpdateShipper updateshipper = new UpdateShipper(null, "", "company11", "link11", "Nagpur", true, true);
 
 		String inputJsonupdate = mapToJson(updateshipper);
 		Response response = RestAssured.given().header("", "").body(inputJsonupdate).header("accept", "application/json")
@@ -474,10 +484,12 @@ public class ApiTestRestAssured{
 
 	}
 	
-	
-	//company name cannot be empty
+	// case: updating shipper with valid(available) pathvariable(shipperid)
+	// were all paramaters are null except phone number and companyname
+	// sending shipper request with companyname as empty string
+	// getting update response as shipper with companyname as previously stored name
 	@Test
-	@Order(12)
+	@Order(14)
 	public void updateshipperfail4() throws Exception{
 		UpdateShipper updateshipper = new UpdateShipper(null, "person22", null, "link11", "Nagpur", true, true);
 
@@ -498,9 +510,12 @@ public class ApiTestRestAssured{
 		assertEquals(true, response.jsonPath().getBoolean("accountVerificationInProgress"));
 	}
 	
-	//location name cannot be empty
+	//case: updating shipper with valid(available) pathvariable(shipperid)
+	//were all paramaters are not null except phone number and shipper location 
+	//sending shipper request with location as empty string
+	//getting update response as shipper with location as previously stored name
 	@Test
-	@Order(13)
+	@Order(15)
 	public void updateshipperfail5() throws Exception{
 		UpdateShipper updateshipper = new UpdateShipper(null, "person33","company11", "link11", null, true, true);
 
@@ -522,167 +537,134 @@ public class ApiTestRestAssured{
 	}
 	
 	//get all
+	//checking that after adding three new shippers in setupfunction git added or not 
+	//checking whether last page contains expected number of shippers according to previously added data
+	//sending page as last page
+	//according to total number of already existed data and the datawe added in setup function of this testing (beforeall)
+	//we will check whether the last page contains expected number of data or not
 	@Test
-	@Order(14)
+	@Order(16)
 	public void getshipperall() throws Exception
 	{
-		long lastPageCount = shippercount_all % pagesize;
-		long page = shipperpagecount_all;
+		long lastPageCount = (shippercount_all + total_shipper_added)%pagesize;
+		long page = (shippercount_all + total_shipper_added)/pagesize;
 
-		if (lastPageCount >= pagesize - 2)
-			page++;
-		
 		Response response = RestAssured.given()
 				.param("pageNo", page)
 				.header("accept", "application/json").header("Content-Type", "application/json").get().then().extract()
 				.response();
 		
-		if(lastPageCount <= pagesize-3)
-		{
-			assertEquals(lastPageCount+3, response.jsonPath().getList("$").size());
-		}
-		else if(lastPageCount == pagesize-2)
-		{
-			assertEquals(1, response.jsonPath().getList("$").size());
-		}
-		else if(lastPageCount == pagesize-1)
-		{
-			assertEquals(2, response.jsonPath().getList("$").size());
-		}
-		else if(lastPageCount == pagesize)
-		{
-			assertEquals(3, response.jsonPath().getList("$").size());
-		}
+		assertEquals(lastPageCount, response.jsonPath().getList("$").size());
 	}
 	
 	//get company approved true
-	
+	//checking whether the number of shipeprs with companyapproved true are equal to expected numbers of user
+	//sending page as last page
+	//according to total number of already existed data and the data we added in setup function of this testing (beforeall)
+	//we will check whether the last page contains expected number of data or not
 	@Test
-	@Order(15)
+	@Order(17)
 	public void getshipper_companyapproved_true() throws Exception
 	{
-		long lastPageCount = shippercount_companyapproved_true % pagesize;
-		long page = shipperpagecount_companyapproved_true;
+		long added_shipper_with_company_approved_true = 1;
+		long lastPageCount = (shippercount_companyapproved_true + added_shipper_with_company_approved_true)% pagesize;
+		long page = (shippercount_companyapproved_true+added_shipper_with_company_approved_true)/pagesize;
 
-		if (lastPageCount >= pagesize)
-			page++;
 		
 		Response response = RestAssured.given()
 				.param("pageNo", page)
 				.param("companyApproved", true)
 				.header("accept", "application/json").header("Content-Type", "application/json").get().then().extract()
 				.response();
-		
-		if(lastPageCount <= pagesize-1)
-		{
-			assertEquals(lastPageCount+1, response.jsonPath().getList("$").size());
-		}
-		else if(lastPageCount == pagesize)
-		{
-			assertEquals(1, response.jsonPath().getList("$").size());
-		}
+
+		assertEquals(lastPageCount, response.jsonPath().getList("$").size());
 	}
 	
 	//company approved false
-	
+	//checking whether the number of shipeprs with companyapproved false are equal to expected numbers of user
+	//sending page as last page
+		//according to total number of already existed data and the datawe added in setup function of this testing (beforeall)
+		// we will check whether the last page contains expected number of data or not
 	@Test
-	@Order(16)
+	@Order(18)
 	public void getshipper_companyapproved_false() throws Exception
 	{
-		long lastPageCount = shippercount_companyapproved_false % pagesize;
-		long page = shipperpagecount_companyapproved_false;
+		long added_shipper_with_company_approved_true = 2;
+		long lastPageCount = (shippercount_companyapproved_false+added_shipper_with_company_approved_true) % pagesize;
+		long page = (shippercount_companyapproved_false+added_shipper_with_company_approved_true)/pagesize;
 
-		if (lastPageCount >= pagesize-1)
-			page++;
-		
 		Response response = RestAssured.given()
 				.param("pageNo", page)
 				.param("companyApproved", false)
 				.header("accept", "application/json").header("Content-Type", "application/json").get().then().extract()
 				.response();
 		
-		if(lastPageCount <= pagesize-2)
-		{
-			assertEquals(lastPageCount+2, response.jsonPath().getList("$").size());
-		}
-		else if(lastPageCount == pagesize-1)
-		{
-			assertEquals(1, response.jsonPath().getList("$").size());
-		}
-		else if(lastPageCount == pagesize)
-		{
-			assertEquals(2, response.jsonPath().getList("$").size());
-		}
+		assertEquals(lastPageCount, response.jsonPath().getList("$").size());
 	}
+	
 	//pageNo null
+	//sending 
 	@Test
-	@Order(17)
+	@Order(19)
 	public void getshipper_companyapproved_false_pageno_null() throws Exception
 	{
-		long lastPageCount = shippercount_companyapproved_false % pagesize;
+		long added_shipper_with_company_approved_true = 2;
+		long lastPageCount = (shippercount_companyapproved_false+added_shipper_with_company_approved_true)%pagesize;
+		long page = (shippercount_companyapproved_false+added_shipper_with_company_approved_true)/pagesize;
 		
 		Response response = RestAssured.given()
 				.param("companyApproved", false)
 				.header("accept", "application/json").header("Content-Type", "application/json").get().then().extract()
 				.response();
 		
-		if(shipperpagecount_companyapproved_false>=1 || lastPageCount>=pagesize-2)
-		{
-			assertEquals(pagesize, response.jsonPath().getList("$").size());
-		}
-		else
-		{
-			assertEquals(lastPageCount+2, response.jsonPath().getList("$").size());
-		}
+		if(page>0) assertEquals(pagesize, response.jsonPath().getList("$").size());
+		else assertEquals(lastPageCount, response.jsonPath().getList("$").size());
 	}
 	
 	//page null
+	//sending page as null and shipper approved true
+	//so by default it well check whether first page contains expected number of elements for not
 	@Test
-	@Order(18)
+	@Order(20)
 	public void getshipper_companyapproved_true_pageno_null() throws Exception
 	{
-		long lastPageCount = shippercount_companyapproved_true % pagesize;
+		long added_shipper_with_company_approved_true = 1;
+		long lastPageCount = (shippercount_companyapproved_true+added_shipper_with_company_approved_true) % pagesize;
+		long page = (shippercount_companyapproved_true+added_shipper_with_company_approved_true)/pagesize;
 		
 		Response response = RestAssured.given()
 				.param("companyApproved", true)
 				.header("accept", "application/json").header("Content-Type", "application/json").get().then().extract()
 				.response();
 		
-		if(shipperpagecount_companyapproved_true>=1 || lastPageCount>=pagesize-1)
-		{
-			assertEquals(pagesize, response.jsonPath().getList("$").size());
-		}
-		else
-		{
-			assertEquals(lastPageCount+1, response.jsonPath().getList("$").size());
-		}
+		if(page>0) assertEquals(pagesize, response.jsonPath().getList("$").size());
+		else assertEquals(lastPageCount, response.jsonPath().getList("$").size());
 	}
 	
 	//page no null
+	//sending page as null and shipper approved true
+	//so by default it well check whether first page contains expected number of elements for not
 	
 	@Test
-	@Order(19)
+	@Order(21)
 	public void getshipperall_pagenonull() throws Exception
 	{
-		long lastPageCount = shippercount_all % pagesize;
+		long lastPageCount = (shippercount_all + total_shipper_added)%pagesize;
+		long page = (shippercount_all + total_shipper_added)/pagesize;
 		
 		Response response = RestAssured.given()
 				.header("accept", "application/json").header("Content-Type", "application/json").get().then().extract()
 				.response();
 		
-		if(shipperpagecount_all>=1 || lastPageCount>=pagesize-2)
-		{
-			assertEquals(pagesize, response.jsonPath().getList("$").size());
-		}
-		else
-		{
-			assertEquals(lastPageCount+3, response.jsonPath().getList("$").size());
-		}
+		if(page>0) assertEquals(pagesize, response.jsonPath().getList("$").size());
+		else assertEquals(lastPageCount, response.jsonPath().getList("$").size());
 	}
 	
 	//getby shipperid success
+	//sending request as valid shipperid
+	//getting valid shipper as response 
 	@Test
-	@Order(20)
+	@Order(22)
 	public void getshipperbyshipperid_success() throws Exception
 	{
 		Response response = RestAssured.given().header("", "").get("/" + shipperid1).then().extract().response();
@@ -698,8 +680,10 @@ public class ApiTestRestAssured{
 	}
 	
 	//getby shipperid fail
+	//sending request with shipperid which is not present in database
+	// getting response as  exception (Shipper was not found for parameters {shipperid})
 	@Test
-	@Order(21)
+	@Order(23)
 	public void getshipperbyshipperid_fail() throws Exception
 	{
 		String shipperid = "shipperrr:0de885e0-5f43-4c68-8dde-0000000000001";
@@ -714,8 +698,10 @@ public class ApiTestRestAssured{
 	}
 	
 	//get shipper phoneNo
+	//sending paramater as valid phone number
+	//getting response with shipper onject respect to phonenumber
 	@Test
-	@Order(22)
+	@Order(24)
 	public void getshipperbyphoneno() throws Exception
 	{
 		Response response = RestAssured.given()
@@ -738,8 +724,10 @@ public class ApiTestRestAssured{
 	}
 	
 	//delete fail account not found
+	//sending request as valid shipperid
+	//getting response as exception (Shipper was not found for parameters {shipperid}) 
 	@Test
-	@Order(23)
+	@Order(25)
 	public void deletedatafail()
 	{
 		String shipperid = "shipperrr:0de885e0-5f43-4c68-8dde-0000000000001";

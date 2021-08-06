@@ -97,31 +97,7 @@
 			<artifactId>commons-lang3</artifactId>
 		</dependency>
 		
-		
 
-<dependency>
-   <groupId>org.hibernate.validator</groupId>
-   <artifactId>hibernate-validator</artifactId>
-</dependency>
-
-
-
-<dependency>
-   <groupId>org.glassfish</groupId>
-   <artifactId>jakarta.el</artifactId>
-</dependency>
-
-
-
-<dependency>
-   <groupId>org.hibernate.validator</groupId>
-   <artifactId>hibernate-validator-cdi</artifactId>
-   <version>7.0.0.Final</version>
-</dependency>
-
-
-		
-		
 	</dependencies>
 
 	<dependencyManagement>

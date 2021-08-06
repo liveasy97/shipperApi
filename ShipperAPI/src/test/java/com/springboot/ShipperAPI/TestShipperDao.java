@@ -30,22 +30,31 @@ import com.springboot.ShipperAPI.Dao.ShipperDao;
 import com.springboot.ShipperAPI.Entity.Shipper;
 
 
-//
 /*
-System.err.println("***************00000000");
-for(Shipper s:shippers.subList(0, 5)) System.err.println(s);
-for(Shipper s:getFromDb1) System.err.println(s);
-*/
-//
 
+this file contains unit test for dao layer
+
+ */
 @DataJpaTest
 public class TestShipperDao {
-	
+
 	@Autowired
 	private TestEntityManager entityManager;
 	
 	@Autowired
 	private ShipperDao shipperdao;
+	
+	public static void wait(int ms)
+	{
+	    try
+	    {
+	        Thread.sleep(ms);
+	    }
+	    catch(InterruptedException ex)
+	    {
+	        Thread.currentThread().interrupt();
+	    }
+	}
 	
 	@Test
 	public void findByPhoneNo()
@@ -86,17 +95,19 @@ public class TestShipperDao {
 		List<Shipper> shippers = new ArrayList<Shipper>();
 		for(int i=1; i<=9; i++)
 		{
+			
 			Shipper savedInDb = entityManager.persist(new Shipper("shipper:0de885e0-5f43-4c68-8dde-000000000000"+i, "person1",
 					"company1", "999999999"+i,"link1", "Nagpur", false, false, Timestamp.valueOf("2021-07-28 23:28:50.13"+i)));
+			entityManager.flush();
 			shippers.add(savedInDb);
+			wait(1);
 		}
-		
 		Collections.reverse(shippers);
-		
+
 		PageRequest firstPage = PageRequest.of(0, 5, Sort.Direction.DESC, "timestamp"),
 				    secondPage = PageRequest.of(1, 5, Sort.Direction.DESC, "timestamp"),
 				    thirdPage = PageRequest.of(2, 5, Sort.Direction.DESC, "timestamp");
-		
+
 		assertThat(shippers.subList(0, 5)).isEqualTo(shipperdao.getAll(firstPage));
 		assertThat(shippers.subList(5, 9)).isEqualTo(shipperdao.getAll(secondPage));
 		assertThat(shippers.subList(9, 9)).isEqualTo(shipperdao.getAll(thirdPage));
@@ -111,10 +122,11 @@ public class TestShipperDao {
 		{
 			Shipper savedInDb = entityManager.persist(new Shipper("shipper:0de885e0-5f43-4c68-8dde-00000000000"+i, "person1",
 					"company1", "99999999"+i,"link1", "Nagpur", (i%2==1), (i%2==1), Timestamp.valueOf("2021-07-28 23:28:50.134")));
+			entityManager.flush();
 			if(i%2==1) shipperstrue.add(savedInDb);
 			else  shippersfalse.add(savedInDb);
+			wait(1);
 		}
-		
 		Collections.reverse(shipperstrue);
 		Collections.reverse(shippersfalse);
 		

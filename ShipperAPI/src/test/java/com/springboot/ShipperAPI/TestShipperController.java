@@ -39,6 +39,12 @@ import com.springboot.ShipperAPI.Response.ShipperDeleteResponse;
 import com.springboot.ShipperAPI.Response.ShipperUpdateResponse;
 import com.springboot.ShipperAPI.Service.ShipperService;
 
+/*
+
+this file contains unit test for controllerlayer
+
+ */
+
 @WebMvcTest(value = ShipperController.class)
 public class TestShipperController {
 	
@@ -78,13 +84,10 @@ public class TestShipperController {
 		
 		String inputJson = mapToJson(postshipper);
 		String expectedJson = mapToJson(shippercreateresponse);
-        //String expectedJson = "{\"status\":\"Pending\",\"message\":\"Please wait for liveasy will approve your request\",\"shipperId\":\"shipper:0de885e0-5f43-4c68-8dde-0000000000001\",\"shipperName\":\"person1\",\"companyName\":\"company1\",\"phoneNo\":\"9999999991\",\"kyc\":\"link1\",\"shipperLocation\":\"Nagpur\",\"companyApproved\":false,\"accountVerificationInProgress\":false,\"timestamp\":\"2021-07-28T17:58:50.134+00:00\"}";
-		RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/shipper").accept(MediaType.APPLICATION_JSON).content(inputJson).contentType(MediaType.APPLICATION_JSON);
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/shipper").accept(MediaType.APPLICATION_JSON).content(inputJson).contentType(MediaType.APPLICATION_JSON);
 		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
 		MockHttpServletResponse response = result.getResponse();
-		String outputInJson = response.getContentAsString();
-		
-		
+		String outputInJson = response.getContentAsString();		
 
 		assertThat(outputInJson).isEqualTo(expectedJson);
 		assertEquals(HttpStatus.CREATED.value(), response.getStatus());
@@ -106,7 +109,6 @@ public class TestShipperController {
 		
 		List<Shipper> shippers1 = shippers.subList(0, 2);
 		String expectedJson = mapToJson(shippers1);
-		//String expectedJson = "[{\"shipperId\":\"shipper:0de885e0-5f43-4c68-8dde-0000000000001\",\"shipperName\":\"person1\",\"companyName\":\"company1\",\"phoneNo\":\"9999999991\",\"kyc\":\"link1\",\"shipperLocation\":\"Nagpur\",\"companyApproved\":false,\"accountVerificationInProgress\":false,\"timestamp\":\"2021-07-28T17:58:50.134+00:00\"},{\"shipperId\":\"shipper:0de885e0-5f43-4c68-8dde-0000000000001\",\"shipperName\":\"person1\",\"companyName\":\"company1\",\"phoneNo\":\"9999999992\",\"kyc\":\"link1\",\"shipperLocation\":\"Nagpur\",\"companyApproved\":false,\"accountVerificationInProgress\":false,\"timestamp\":\"2021-07-28T17:58:50.134+00:00\"}]";
 		String outputInJson = result.getResponse().getContentAsString();
 		
 		assertEquals(expectedJson, outputInJson);
@@ -114,7 +116,7 @@ public class TestShipperController {
 	}
 	
 	@Test
-	@Order(2)
+	@Order(3)
 	public void getShippercompanyapprovednull() throws Exception
 	{
 		List<Shipper> shippers = createShippers();
@@ -138,7 +140,7 @@ public class TestShipperController {
 	
 	
 	@Test
-	@Order(3)
+	@Order(4)
 	public void getbyshipperid() throws Exception
 	{
 		
@@ -158,9 +160,8 @@ public class TestShipperController {
 
 	}
 	
-	
 	@Test
-	@Order(4)
+	@Order(5)
 	public void updateshipper() throws Exception
 	{
 		
@@ -190,7 +191,7 @@ public class TestShipperController {
 	
 	
 	@Test
-	@Order(5)
+	@Order(6)
 	public void deleteshipper() throws Exception
 	{
 		

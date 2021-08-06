@@ -3,11 +3,14 @@ package com.springboot.ShipperAPI;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -40,15 +43,13 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Order;
 
 /*
-System.err.println("*********************1");
-System.err.println(constraintViolations.size());
-System.err.println(constraintViolations.toString());
-*/
+
+this file contains unit test for service layer
+
+ */
 
 @SpringBootTest
 public class TestShipperService {
-	
-	//private LocalValidatorFactoryBean localValidatorFactory;
 	
 	private static Validator validator;
 	
@@ -100,20 +101,37 @@ public class TestShipperService {
 		assertEquals("Phone no. cannot be blank!", constraintViolations.iterator().next().getMessage());
 	}
 	
-	//add invalid phone no
+	//blank phone number
 	@Test
 	@Order(3)
+	public void addShipperphonenoblank()
+	{
+		PostShipper postshipper = new PostShipper("person1","company1", "Nagpur", "    ","link1");
+		Set<ConstraintViolation<PostShipper>> constraintViolations = validator.validate(postshipper);
+		
+		Iterator<ConstraintViolation<PostShipper>> itr = constraintViolations.iterator();
+		Set<String> set = new HashSet<String>();
+		while(itr.hasNext()) set.add(itr.next().getMessage());
+
+		assertEquals(2, constraintViolations.size());
+		assertTrue(set.contains("Please enter a valid mobile number"));
+		assertTrue(set.contains("Phone no. cannot be blank!"));   
+	}
+	
+	//add invalid phone no
+	@Test
+	@Order(4)
 	public void addShipperinvalidphoneno()
 	{
 		PostShipper postshipper = new PostShipper("person1","company1", "Nagpur", "9999","link1");
 		Set<ConstraintViolation<PostShipper>> constraintViolations = validator.validate(postshipper);
 		assertEquals(1, constraintViolations.size());
 		assertEquals("Please enter a valid mobile number", constraintViolations.iterator().next().getMessage());
-	}	
+	}
 	
 	//add already present
 	@Test
-	@Order(4)
+	@Order(5)
 	public void addShipperphonenopresent()
 	{
 		PostShipper postshipper = new PostShipper("person1","company1", "Nagpur", "9999999991","link1");
@@ -135,9 +153,9 @@ public class TestShipperService {
 		assertEquals(shippercreateresponse, shippercreateresponseres);
 	}
 
-	//commany approved true
+	//company approved true
 	@Test
-	@Order(8)
+	@Order(6)
 	public void getShippers_companyapproved_notnull()
 	{
 		List<Shipper> shippers = createShippers();
@@ -152,7 +170,7 @@ public class TestShipperService {
 	
 	//phoneNo not null
 	@Test
-	@Order(9)
+	@Order(7)
 	public void getShippers_phoneNo_not_null()
 	{
 		Shipper shipper = new Shipper("shipper:0de885e0-5f43-4c68-8dde-0000000000001", "person1",
@@ -166,7 +184,7 @@ public class TestShipperService {
 	
 	//page no null
 	@Test
-	@Order(10)
+	@Order(8)
 	public void getShippers_pageno_null()
 	{
 		List<Shipper> shippers = createShippers();
@@ -181,7 +199,7 @@ public class TestShipperService {
 	
 	
 	@Test
-	@Order(11)
+	@Order(9)
 	public void getOneShipper_id_present()
 	{
 		when(shipperdao.findById("shipper:0de885e0-5f43-4c68-8dde-0000000000001")).thenReturn(Optional.of(createShippers().get(0)));
@@ -192,7 +210,7 @@ public class TestShipperService {
 	
 	
 	@Test
-	@Order(12)
+	@Order(10)
 	public void getOneShipper_id_not_present()
 	{
 		when(shipperdao.findById("shipper:0de885e0-5f43-4c68-8dde-0000000000001")).thenReturn(Optional.empty());
@@ -209,7 +227,7 @@ public class TestShipperService {
 	//update shipper
 	
 	@Test
-	@Order(13)
+	@Order(11)
 	public void updateShipper_success()
 	{
 		UpdateShipper updateshipper = new UpdateShipper(null, "person11","company11", "link11", "Nagpur", true, true);
@@ -225,10 +243,29 @@ public class TestShipperService {
 		assertEquals(updateresponse, result);
 	}
 	
+	//all null
+		@Test
+		@Order(12)
+		public void updateShipper_all_null()
+		{
+			UpdateShipper updateshipper = new UpdateShipper(null, null,null, null, null, null, null);
+			
+			ShipperUpdateResponse updateresponse = new ShipperUpdateResponse(CommonConstants.SUCCESS, CommonConstants.UPDATE_SUCCESS, 
+					"shipper:0de885e0-5f43-4c68-8dde-0000000000001","person1", "company1", "9999999991",
+					"link1",	"Nagpur", false, false, Timestamp.valueOf("2021-07-28 23:28:50.134"));
+			
+			when(shipperdao.findById("shipper:0de885e0-5f43-4c68-8dde-0000000000001")).thenReturn(Optional.of(createShippers().get(0)));
+			when(shipperdao.save(createShippers().get(0))).thenReturn(createShippers().get(0));
+			
+			ShipperUpdateResponse result = shipperservice.updateShipper("shipper:0de885e0-5f43-4c68-8dde-0000000000001", updateshipper);
+			
+			assertEquals(updateresponse, result);
+		}
+	
 	
 	//phone number cannot be changed
 	@Test
-	@Order(14)
+	@Order(13)
 	public void updateShipper_phoneno_notnull()
 	{
 		UpdateShipper updateshipper = new UpdateShipper("9999999991", "person11","company11", "link11", "Nagpur", true, true);
@@ -247,27 +284,63 @@ public class TestShipperService {
 	
 	
 	//shipper name empty
-	//company name empty
-	//shipper location empty
-	//all null
-	public void updateShipper_all_null()
+	@Test
+	@Order(14)
+	public void updateShipper_shippername_empty()
 	{
-		UpdateShipper updateshipper = new UpdateShipper(null, null,null, null, null, null, null);
-		
+		UpdateShipper updateshipper = new UpdateShipper(null, " ","company11", "link11", "Nagpur", true, true);
 		ShipperUpdateResponse updateresponse = new ShipperUpdateResponse(CommonConstants.SUCCESS, CommonConstants.UPDATE_SUCCESS, 
-				"shipper:0de885e0-5f43-4c68-8dde-0000000000001","person11", "company11", "9999999991",
+				"shipper:0de885e0-5f43-4c68-8dde-0000000000001","person1", "company11", "9999999991",
 				"link11",	"Nagpur", true, true, Timestamp.valueOf("2021-07-28 23:28:50.134"));
 		
 		when(shipperdao.findById("shipper:0de885e0-5f43-4c68-8dde-0000000000001")).thenReturn(Optional.of(createShippers().get(0)));
 		when(shipperdao.save(createShippers().get(0))).thenReturn(createShippers().get(0));
 		
 		ShipperUpdateResponse result = shipperservice.updateShipper("shipper:0de885e0-5f43-4c68-8dde-0000000000001", updateshipper);
+		
 		assertEquals(updateresponse, result);
 	}
 	
+	//company name empty
+	@Test
+	@Order(15)
+	public void updateShipper_companyname_empty()
+	{
+		UpdateShipper updateshipper = new UpdateShipper(null, "person2"," ", "link2", "Nagpur", true, true);
+		ShipperUpdateResponse updateresponse = new ShipperUpdateResponse(CommonConstants.SUCCESS, CommonConstants.UPDATE_SUCCESS, 
+				"shipper:0de885e0-5f43-4c68-8dde-0000000000001","person2", "company1", "9999999991",
+				"link2",	"Nagpur", true, true, Timestamp.valueOf("2021-07-28 23:28:50.134"));
+		
+		when(shipperdao.findById("shipper:0de885e0-5f43-4c68-8dde-0000000000001")).thenReturn(Optional.of(createShippers().get(0)));
+		when(shipperdao.save(createShippers().get(0))).thenReturn(createShippers().get(0));
+		
+		ShipperUpdateResponse result = shipperservice.updateShipper("shipper:0de885e0-5f43-4c68-8dde-0000000000001", updateshipper);
+
+		assertEquals(updateresponse, result);
+	}
+	
+	//shipper location empty
+	@Test
+	@Order(16)
+	public void updateShipper_location_empty()
+	{
+		UpdateShipper updateshipper = new UpdateShipper(null, "person3","company3", "link3", " ", true, true);
+		ShipperUpdateResponse updateresponse = new ShipperUpdateResponse(CommonConstants.SUCCESS, CommonConstants.UPDATE_SUCCESS, 
+				"shipper:0de885e0-5f43-4c68-8dde-0000000000001","person3", "company3", "9999999991",
+				"link3", "Nagpur", true, true, Timestamp.valueOf("2021-07-28 23:28:50.134"));
+		
+		when(shipperdao.findById("shipper:0de885e0-5f43-4c68-8dde-0000000000001")).thenReturn(Optional.of(createShippers().get(0)));
+		when(shipperdao.save(createShippers().get(0))).thenReturn(createShippers().get(0));
+		
+		ShipperUpdateResponse result = shipperservice.updateShipper("shipper:0de885e0-5f43-4c68-8dde-0000000000001", updateshipper);
+
+		assertEquals(updateresponse, result);
+	}
+	
+	
 	//account not found 
 	@Test
-	@Order(19)
+	@Order(17)
 	public void updateShipper_fail()
 	{
 		UpdateShipper updateshipper = new UpdateShipper(null, "person11","company11", "link11", "Nagpur", true, true);
@@ -285,7 +358,7 @@ public class TestShipperService {
 	
 	//delete pass
 	@Test
-	@Order(20)
+	@Order(18)
 	public void deleteShipper_pass()
 	{
 		when(shipperdao.findById("shipper:0de885e0-5f43-4c68-8dde-0000000000001")).thenReturn(Optional.of(createShippers().get(0)));
@@ -293,7 +366,7 @@ public class TestShipperService {
 	}
 	
 	@Test
-	@Order(20)
+	@Order(19)
 	public void deleteShipper_fail()
 	{
 		when(shipperdao.findById("shipper:0de885e0-5f43-4c68-8dde-0000000000001")).thenReturn(Optional.empty());
