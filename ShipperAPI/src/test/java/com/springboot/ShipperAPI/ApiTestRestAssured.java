@@ -1,3 +1,4 @@
+/*
 package com.springboot.ShipperAPI;
 import com.springboot.ShipperAPI.Constants.CommonConstants;
 import com.springboot.ShipperAPI.Entity.Shipper;
@@ -30,11 +31,11 @@ import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 
 
-/*
 
-this file contains integrated testing
 
-*/
+//this file contains integrated testing
+
+
 @TestMethodOrder(OrderAnnotation.class)
 
 public class ApiTestRestAssured{
@@ -757,3 +758,4 @@ public class ApiTestRestAssured{
 	}
 	
 }
+*/
