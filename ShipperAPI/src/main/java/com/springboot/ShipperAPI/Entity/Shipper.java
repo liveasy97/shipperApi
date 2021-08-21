@@ -11,11 +11,15 @@ import javax.validation.constraints.Pattern;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Table(name = "Shipper")
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 public class Shipper {
 	@Id
 	private String shipperId;

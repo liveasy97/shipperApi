@@ -182,9 +182,11 @@ public class ShipperServiceImpl implements ShipperService {
 			throw new BusinessException("Phone no. can't be updated");
 		}
 
-		if (updateShipper.getShipperName() != null) {
-			shipper.setShipperName(updateShipper.getShipperName().trim());
+		temp=updateShipper.getShipperName();
+		if(StringUtils.isNotBlank(temp)) {
+			shipper.setShipperName(temp.trim());
 		}
+		
 		temp=updateShipper.getCompanyName();
 		if(StringUtils.isNotBlank(temp)) {
 			shipper.setCompanyName(temp.trim());
