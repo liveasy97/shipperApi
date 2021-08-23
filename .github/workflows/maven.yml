@@ -33,6 +33,5 @@ jobs:
     - run: sudo docker container rm shipper-container || true
     - run: sudo docker image rm shipper || true
     - run: sudo docker build -t shipper .
-    - run: sudo docker start shipper-postgres || sudo docker run --name shipper-postgres -e POSTGRES_PASSWORD=postgres -d shipperpostgres:latest
-    - run: sudo docker run -p 8080:8080 --name shipper-container --link shipper-postgres:postgres shipper | echo "success" 
+    - run: sudo docker run -p 8080:8080 --name shipper-container -d shipper | echo "success" 
  
