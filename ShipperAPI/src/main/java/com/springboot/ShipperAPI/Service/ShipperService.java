@@ -13,7 +13,7 @@ public interface ShipperService {
 
 	public ShipperCreateResponse addShipper(PostShipper shipper);
 
-	public List<Shipper> getShippers(Boolean companyApproved, Integer pageNo);
+	public List<Shipper> getShippers(Boolean companyApproved, String phoneNo, Integer pageNo);
 
 	public Shipper getOneShipper(String shipperId);
 

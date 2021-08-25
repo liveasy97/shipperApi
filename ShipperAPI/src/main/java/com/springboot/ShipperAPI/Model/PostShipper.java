@@ -3,9 +3,11 @@ package com.springboot.ShipperAPI.Model;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 public class PostShipper {
 	private String shipperName;
 	private String companyName;

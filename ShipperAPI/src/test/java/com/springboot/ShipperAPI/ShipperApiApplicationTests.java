@@ -6,7 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class ShipperApiApplicationTests {
 	
-	@Test
+	//@Test
 	void contextLoads() {
 	}
 
