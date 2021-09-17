@@ -2,6 +2,7 @@ package com.springboot.ShipperAPI.Service;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
 
 import com.springboot.ShipperAPI.Entity.Shipper;
 import com.springboot.ShipperAPI.Model.PostShipper;

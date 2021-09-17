@@ -30,10 +30,10 @@ public class ShipperController {
 	@Autowired
 	ShipperService service;
 
-	@GetMapping("/home")
-	public String home() {
-		return "Welcome to shipperApi git actions test 2...!!!";
-	}
+//	@GetMapping("/home")
+//	public String home() {
+//		return "Welcome to shipperApi git actions test 2...!!!";
+//	}
 
 
 	@PostMapping("/shipper")
