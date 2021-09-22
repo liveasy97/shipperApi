@@ -1,0 +1,16 @@
+cloud:
+  aws:
+    credentials:
+      access-key: ${access-key}    #AKIARHB2H4PBPVLUV57H  (use these keys for running in local host)
+      secret-key: ${secret-key}    #BXiUweIAPuIMZ1nPpNB2sLvOTermeh+czCSR3JZj
+      
+    region:
+      static: ap-south-1
+      auto: false
+      
+    stack:
+      auto: false
+      
+
+     
+      
